@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet, Alert } from 'react-native';
+import { markAttendanceToday } from '../../services/storage';
 
 export default function Dashboard({ navigation }) {
   const markAttendance = () => {
@@ -30,3 +31,13 @@ const styles = StyleSheet.create({
   buttonGroup: { width: '100%' },
   spacer: { height: 20 }
 });
+
+// Inside Dashboard component
+const markAttendance = async () => {
+  const success = await markAttendanceToday();
+  if (success) {
+    Alert.alert("✅ Marked", "Your attendance has been recorded.");
+  } else {
+    Alert.alert("⚠️ Already marked", "You’ve already marked attendance today.");
+  }
+};

@@ -1,24 +1,21 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+const ATTENDANCE_KEY = 'attendance_logs';
 
-const STORAGE_KEY = 'leave_requests';
+export const markAttendanceToday = async () => {
+  const today = new Date().toLocaleDateString();
+  const time = new Date().toLocaleTimeString();
 
-export const saveLeaveRequest = async (newRequest) => {
-  try {
-    const existing = await AsyncStorage.getItem(STORAGE_KEY);
-    const parsed = existing ? JSON.parse(existing) : [];
-    const updated = [...parsed, { id: Date.now(), ...newRequest }];
-    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-  } catch (e) {
-    console.error('Error saving leave request', e);
-  }
+  const existing = await AsyncStorage.getItem(ATTENDANCE_KEY);
+  const logs = existing ? JSON.parse(existing) : [];
+
+  const alreadyMarked = logs.find(log => log.date === today);
+  if (alreadyMarked) return false;
+
+  logs.push({ date: today, time });
+  await AsyncStorage.setItem(ATTENDANCE_KEY, JSON.stringify(logs));
+  return true;
 };
 
-export const getAllLeaveRequests = async () => {
-  try {
-    const existing = await AsyncStorage.getItem(STORAGE_KEY);
-    return existing ? JSON.parse(existing) : [];
-  } catch (e) {
-    console.error('Error reading leave requests', e);
-    return [];
-  }
+export const getAttendanceLogs = async () => {
+  const existing = await AsyncStorage.getItem(ATTENDANCE_KEY);
+  return existing ? JSON.parse(existing) : [];
 };

@@ -7,6 +7,8 @@ import LeaveRequest from '../screens/employee/LeaveRequest';
 import ApprovalScreen from '../screens/manager/ApprovalScreen';
 import HRDashboard from '../screens/hr/HRDashboard';
 import { AuthContext } from '../context/AuthContext';
+import AttendanceHistory from '../screens/employee/AttendanceHistory';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +24,7 @@ export default function AppNavigator() {
           <>
             <Stack.Screen name="Dashboard" component={Dashboard} />
             <Stack.Screen name="LeaveRequest" component={LeaveRequest} />
+            <Stack.Screen name="AttendanceHistory" component={AttendanceHistory} />
           </>
         ) : role === 'manager' ? (
           <Stack.Screen name="ApprovalScreen" component={ApprovalScreen} />
