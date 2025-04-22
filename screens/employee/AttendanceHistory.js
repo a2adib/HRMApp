@@ -6,35 +6,58 @@ export default function AttendanceHistory() {
   const [logs, setLogs] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchLogs = async () => {
       const data = await getAttendanceLogs();
       setLogs(data);
     };
-    fetchData();
+
+    fetchLogs();
   }, []);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>📅 Attendance History</Text>
-      {logs.length === 0 && <Text>No attendance yet.</Text>}
-      {logs.map((log, idx) => (
-        <View key={idx} style={styles.card}>
-          <Text>🗓️ {log.date}</Text>
-          <Text>🕒 Time: {log.time}</Text>
-        </View>
-      ))}
+
+      {logs.length === 0 ? (
+        <Text>No attendance recorded yet.</Text>
+      ) : (
+        logs.map((log, index) => (
+          <View key={index} style={styles.card}>
+            <Text style={styles.date}>🗓️ {log.date}</Text>
+            <Text style={styles.time}>🕒 {log.time}</Text>
+          </View>
+        ))
+      )}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20 },
-  title: { fontSize: 20, fontWeight: 'bold', marginBottom: 10 },
+  container: {
+    padding: 20,
+    paddingBottom: 50,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
   card: {
+    padding: 15,
+    marginBottom: 12,
     borderWidth: 1,
-    borderRadius: 6,
-    padding: 12,
-    marginBottom: 10,
+    borderColor: '#ddd',
+    borderRadius: 8,
     backgroundColor: '#f9f9f9',
   },
+  date: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  time: {
+    fontSize: 14,
+    color: '#666',
+  },
 });
+
+console.log('📦 Saving attendance...');

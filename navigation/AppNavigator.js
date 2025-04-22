@@ -13,7 +13,7 @@ import AttendanceHistory from '../screens/employee/AttendanceHistory';
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
-  const { role } = useContext(AuthContext); // 'employee', 'manager', or 'hr'
+  const { role } = useContext(AuthContext);
 
   return (
     <NavigationContainer>
