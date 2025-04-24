@@ -18,6 +18,9 @@ import ExportAttendance from '../screens/hr/ExportAttendance';
 import ManagerDashboard from '../screens/manager/ManagerDashboard';
 import ManagerLeaveRequest from '../screens/manager/ManagerLeaveRequest';
 import ManagerAttendanceHistory from '../screens/manager/ManagerAttendanceHistory';
+import ManagerLeaveApproval from '../screens/manager/ManagerLeaveApproval'; // ✅ Must import
+import AssignedEmployees from '../screens/manager/AssignedEmployees';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +42,8 @@ export default function AppNavigator() {
           <Stack.Screen name="ManagerDashboard" component={ManagerDashboard} />
           <Stack.Screen name="ManagerLeaveRequest" component={ManagerLeaveRequest} />
           <Stack.Screen name="ManagerAttendanceHistory" component={ManagerAttendanceHistory} />
+          <Stack.Screen name="ManagerLeaveApproval" component={ManagerLeaveApproval} />
+          <Stack.Screen name="AssignedEmployees" component={AssignedEmployees} />
         </>
       ) : (
         <>

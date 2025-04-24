@@ -7,7 +7,12 @@ export const getUsers = async () => {
   if (data) return JSON.parse(data);
 
   const defaultUsers = [
-    { username: 'emp01', password: '1234', role: 'employee' },
+    {
+      username: 'emp02',
+      password: '1234',
+      role: 'employee',
+      manager: 'mgr01'  // ✅ Assigned manager's username
+    },
     { username: 'mgr01', password: '1234', role: 'manager' },
     { username: 'hr01', password: '1234', role: 'hr' }
   ];
@@ -21,3 +26,4 @@ export const addUser = async (newUser) => {
   users.push(newUser);
   await AsyncStorage.setItem(USERS_KEY, JSON.stringify(users));
 };
+

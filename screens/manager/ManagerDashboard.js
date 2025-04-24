@@ -24,6 +24,9 @@ export default function ManagerDashboard({ navigation }) {
       <Button title="Mark Attendance" onPress={markAttendance} />
       <Button title="Request Leave" onPress={() => navigation.navigate('ManagerLeaveRequest')} />
       <Button title="View Attendance History" onPress={() => navigation.navigate('ManagerAttendanceHistory')} />
+      <Button title="Approve Employee Leave" onPress={() => navigation.navigate('ManagerLeaveApproval')} />
+      <Button title="View My Assigned Employees" onPress={() => navigation.navigate('AssignedEmployees')}/>
+
       <View style={{ marginTop: 30 }}>
         <Button title="Logout" color="red" onPress={handleLogout} />
       </View>
