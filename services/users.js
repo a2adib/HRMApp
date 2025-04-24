@@ -1,3 +1,7 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const USERS_KEY = 'users_data';
+
 export const getUsers = async () => {
   const data = await AsyncStorage.getItem(USERS_KEY);
   if (data) return JSON.parse(data);
@@ -10,4 +14,10 @@ export const getUsers = async () => {
 
   await AsyncStorage.setItem(USERS_KEY, JSON.stringify(defaultUsers));
   return defaultUsers;
+};
+
+export const addUser = async (newUser) => {
+  const users = await getUsers();
+  users.push(newUser);
+  await AsyncStorage.setItem(USERS_KEY, JSON.stringify(users));
 };

@@ -5,19 +5,28 @@ import { AuthContext } from '../../context/AuthContext';
 
 export default function ManagerDashboard({ navigation }) {
   const { username, role } = useContext(AuthContext);
+  const { setRole, setUsername } = useContext(AuthContext);
 
   const markAttendance = async () => {
     const success = await markAttendanceToday(username, role);
     Alert.alert(success ? '✅ Marked' : '⚠️ Already marked');
   };
 
+  const handleLogout = () => {
+    setRole(null);
+    setUsername(null);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Manager Dashboard</Text>
+      <Text style={styles.subtitle}>Welcome, {username} 👋</Text>
       <Button title="Mark Attendance" onPress={markAttendance} />
       <Button title="Request Leave" onPress={() => navigation.navigate('ManagerLeaveRequest')} />
       <Button title="View Attendance History" onPress={() => navigation.navigate('ManagerAttendanceHistory')} />
-      <Button title="Logout" color="red" onPress={() => { setRole(null); setUsername(null); }}/>
+      <View style={{ marginTop: 30 }}>
+        <Button title="Logout" color="red" onPress={handleLogout} />
+      </View>
     </View>
   );
 }
@@ -25,4 +34,11 @@ export default function ManagerDashboard({ navigation }) {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, justifyContent: 'center' },
   title: { fontSize: 22, textAlign: 'center', marginBottom: 20 },
+  subtitle: {
+    fontSize: 16,
+    color: '#555',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  
 });

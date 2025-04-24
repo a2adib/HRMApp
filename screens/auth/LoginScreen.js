@@ -4,7 +4,8 @@ import { AuthContext } from '../../context/AuthContext';
 import { getUsers } from '../../services/users';
 
 export default function LoginScreen() {
-  const { setRole, setUsername } = useContext(AuthContext);
+  const { setRole, setUsername, updateLogin } = useContext(AuthContext);
+
   const [inputUsername, setInputUsername] = useState('');
   const [inputPassword, setInputPassword] = useState('');
 
@@ -19,8 +20,7 @@ export default function LoginScreen() {
       return;
     }
 
-    setRole(user.role);
-    setUsername(user.username);
+    updateLogin(user.username, user.role);
   };
 
   return (

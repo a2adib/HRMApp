@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AuthContext } from '../context/AuthContext';
 
-// Screens...
 import LoginScreen from '../screens/auth/LoginScreen';
 import Dashboard from '../screens/employee/Dashboard';
 import LeaveRequest from '../screens/employee/LeaveRequest';
@@ -12,6 +11,9 @@ import HRDashboard from '../screens/hr/HRDashboard';
 import AddUser from '../screens/hr/AddUser';
 import AllAttendance from '../screens/hr/AllAttendance';
 import HRLeaveApproval from '../screens/hr/HRLeaveApproval';
+import UserList from '../screens/hr/UserList';
+import ExportAttendance from '../screens/hr/ExportAttendance';
+
 
 import ManagerDashboard from '../screens/manager/ManagerDashboard';
 import ManagerLeaveRequest from '../screens/manager/ManagerLeaveRequest';
@@ -43,7 +45,9 @@ export default function AppNavigator() {
           <Stack.Screen name="HRDashboard" component={HRDashboard} />
           <Stack.Screen name="AddUser" component={AddUser} />
           <Stack.Screen name="AllAttendance" component={AllAttendance} />
+          <Stack.Screen name="UserList" component={UserList} />
           <Stack.Screen name="HRLeaveApproval" component={HRLeaveApproval} />
+          <Stack.Screen name="ExportAttendance" component={ExportAttendance} />
         </>
       )}
     </Stack.Navigator>
