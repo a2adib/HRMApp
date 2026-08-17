@@ -21,9 +21,29 @@ export const getUsers = async () => {
   return defaultUsers;
 };
 
-export const addUser = async (newUser) => {
+/** Look up a user by username, ignoring case and surrounding whitespace. */
+export const findUser = async (username) => {
   const users = await getUsers();
-  users.push(newUser);
-  await AsyncStorage.setItem(USERS_KEY, JSON.stringify(users));
+  const needle = String(username || '').trim().toLowerCase();
+  return users.find(user => user.username.toLowerCase() === needle) || null;
 };
 
+/**
+ * Add a user, rejecting a username that is already taken.
+ *
+ * @returns {Promise<{ ok: boolean, error?: string }>}
+ */
+export const addUser = async (newUser) => {
+  const username = String(newUser.username || '').trim();
+  if (!username) return { ok: false, error: 'Username is required' };
+
+  const users = await getUsers();
+  const taken = users.some(
+    user => user.username.toLowerCase() === username.toLowerCase()
+  );
+  if (taken) return { ok: false, error: `Username "${username}" is already taken` };
+
+  users.push({ ...newUser, username });
+  await AsyncStorage.setItem(USERS_KEY, JSON.stringify(users));
+  return { ok: true };
+};

@@ -1,36 +1,50 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { ScrollView, View, Text, Button, StyleSheet, Alert } from 'react-native';
 import { getLeaveRequests, updateLeaveStatus } from '../../services/storage';
+import { getUsers } from '../../services/users';
+import { formatDisplayDate } from '../../services/date';
+import { AuthContext } from '../../context/AuthContext';
 
 export default function ManagerLeaveApproval() {
   const [requests, setRequests] = useState([]);
+  const { username } = useContext(AuthContext);
 
-  useEffect(() => {
-    const load = async () => {
-      const data = await getLeaveRequests();
-      const employeeRequests = data.filter(r => r.status === 'Pending' && r.role === 'employee');
-      setRequests(employeeRequests);
-    };
-    load();
-  }, []);
+  const load = useCallback(async () => {
+    const [allRequests, users] = await Promise.all([getLeaveRequests(), getUsers()]);
+
+    // Only this manager's direct reports — without this every manager can see
+    // and approve leave for every other manager's team.
+    const myReports = new Set(
+      users
+        .filter(user => user.role === 'employee' && user.manager === username)
+        .map(user => user.username)
+    );
+
+    setRequests(
+      allRequests.filter(
+        request => request.status === 'Pending' && myReports.has(request.username)
+      )
+    );
+  }, [username]);
+
+  useEffect(() => { load(); }, [load]);
 
   const handleAction = async (id, status) => {
     await updateLeaveStatus(id, status);
     Alert.alert(`Leave ${status}`);
-    const updated = requests.filter(r => r.id !== id);
-    setRequests(updated);
+    setRequests(current => current.filter(request => request.id !== id));
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Employee Leave Approvals</Text>
       {requests.length === 0 ? (
-        <Text>No pending leave requests from employees.</Text>
+        <Text>No pending leave requests from your team.</Text>
       ) : (
-        requests.map((req, idx) => (
-          <View key={idx} style={styles.card}>
+        requests.map((req) => (
+          <View key={req.id} style={styles.card}>
             <Text>👤 {req.username}</Text>
-            <Text>📅 {req.fromDate} to {req.toDate}</Text>
+            <Text>📅 {formatDisplayDate(req.fromDate)} to {formatDisplayDate(req.toDate)}</Text>
             <Text>📄 Reason: {req.reason}</Text>
             <View style={styles.buttons}>
               <Button title="Approve" onPress={() => handleAction(req.id, 'Approved')} />

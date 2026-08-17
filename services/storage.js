@@ -1,23 +1,23 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { toIsoDate } from './date';
 
 const ATTENDANCE_KEY = 'attendance_logs';
 const LEAVE_KEY = 'leave_requests';
 
 export const markAttendanceToday = async (username, role) => {
-  const today = new Date();
-  const formattedDate = today.toLocaleDateString();
-  const formattedTime = today.toLocaleTimeString();
+  const now = new Date();
+  const date = toIsoDate(now);
 
   try {
     const existing = await AsyncStorage.getItem(ATTENDANCE_KEY);
     const logs = existing ? JSON.parse(existing) : [];
 
-    const alreadyMarked = logs.find(
-      log => log.date === formattedDate && log.username === username
+    const alreadyMarked = logs.some(
+      log => log.date === date && log.username === username
     );
     if (alreadyMarked) return false;
 
-    logs.push({ username, role, date: formattedDate, time: formattedTime });
+    logs.push({ username, role, date, markedAt: now.toISOString() });
     await AsyncStorage.setItem(ATTENDANCE_KEY, JSON.stringify(logs));
     return true;
   } catch (error) {

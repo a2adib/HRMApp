@@ -4,17 +4,11 @@ import { markAttendanceToday } from '../../services/storage';
 import { AuthContext } from '../../context/AuthContext';
 
 export default function ManagerDashboard({ navigation }) {
-  const { username, role } = useContext(AuthContext);
-  const { setRole, setUsername } = useContext(AuthContext);
+  const { username, role, logout } = useContext(AuthContext);
 
   const markAttendance = async () => {
     const success = await markAttendanceToday(username, role);
     Alert.alert(success ? '✅ Marked' : '⚠️ Already marked');
-  };
-
-  const handleLogout = () => {
-    setRole(null);
-    setUsername(null);
   };
 
   return (
@@ -22,13 +16,13 @@ export default function ManagerDashboard({ navigation }) {
       <Text style={styles.title}>Manager Dashboard</Text>
       <Text style={styles.subtitle}>Welcome, {username} 👋</Text>
       <Button title="Mark Attendance" onPress={markAttendance} />
-      <Button title="Request Leave" onPress={() => navigation.navigate('ManagerLeaveRequest')} />
-      <Button title="View Attendance History" onPress={() => navigation.navigate('ManagerAttendanceHistory')} />
+      <Button title="Request Leave" onPress={() => navigation.navigate('LeaveRequest')} />
+      <Button title="View Attendance History" onPress={() => navigation.navigate('AttendanceHistory')} />
       <Button title="Approve Employee Leave" onPress={() => navigation.navigate('ManagerLeaveApproval')} />
       <Button title="View My Assigned Employees" onPress={() => navigation.navigate('AssignedEmployees')}/>
 
       <View style={{ marginTop: 30 }}>
-        <Button title="Logout" color="red" onPress={handleLogout} />
+        <Button title="Logout" color="red" onPress={logout} />
       </View>
     </View>
   );

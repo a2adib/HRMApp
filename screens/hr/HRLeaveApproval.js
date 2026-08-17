@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View, Text, Button, Alert, StyleSheet } from 'react-native';
 import { getLeaveRequests, updateLeaveStatus } from '../../services/storage';
+import { formatDisplayDate } from '../../services/date';
 
 export default function HRLeaveApproval() {
   const [requests, setRequests] = useState([]);
@@ -21,10 +22,11 @@ export default function HRLeaveApproval() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Leave Approval</Text>
-      {requests.map((req, idx) => (
-        <View key={idx} style={styles.card}>
+      {requests.length === 0 && <Text>No pending leave requests.</Text>}
+      {requests.map((req) => (
+        <View key={req.id} style={styles.card}>
           <Text>👤 {req.username} ({req.role})</Text>
-          <Text>📅 {req.fromDate} → {req.toDate}</Text>
+          <Text>📅 {formatDisplayDate(req.fromDate)} → {formatDisplayDate(req.toDate)}</Text>
           <Text>📄 Reason: {req.reason}</Text>
           <View style={styles.row}>
             <Button title="Approve" onPress={() => handleAction(req.id, 'Approved')} />

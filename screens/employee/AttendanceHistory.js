@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import { getAttendanceLogs } from '../../services/storage';
+import { formatDisplayDate, formatTime } from '../../services/date';
 import { AuthContext } from '../../context/AuthContext';
 
 export default function AttendanceHistory() {
@@ -22,10 +23,10 @@ export default function AttendanceHistory() {
       {logs.length === 0 ? (
         <Text>No attendance marked yet.</Text>
       ) : (
-        logs.map((log, index) => (
-          <View key={index} style={styles.card}>
-            <Text>📆 {log.date}</Text>
-            <Text>⏰ {log.time}</Text>
+        logs.map((log) => (
+          <View key={log.date} style={styles.card}>
+            <Text>📆 {formatDisplayDate(log.date)}</Text>
+            <Text>⏰ {formatTime(log.markedAt)}</Text>
           </View>
         ))
       )}
