@@ -5,17 +5,11 @@ import { AuthContext } from '../../context/AuthContext';
 
 
 export default function Dashboard({ navigation }) {
-  const { username, role } = useContext(AuthContext);
-  const { setRole, setUsername } = useContext(AuthContext);
-  
+  const { username, role, logout } = useContext(AuthContext);
 
   const markAttendance = async () => {
     const success = await markAttendanceToday(username, role);
     Alert.alert(success ? '✅ Marked' : '⚠️ Already Marked');
-  };
-  const handleLogout = () => {
-    setRole(null);
-    setUsername(null);
   };
 
   return (
@@ -26,7 +20,7 @@ export default function Dashboard({ navigation }) {
       <Button title="Request Leave" onPress={() => navigation.navigate('LeaveRequest')} />
       <Button title="View Attendance History" onPress={() => navigation.navigate('AttendanceHistory')} />
       <View style={{ marginTop: 30 }}>
-        <Button title="Logout" color="red" onPress={handleLogout} />
+        <Button title="Logout" color="red" onPress={logout} />
       </View>
     </View>
   );

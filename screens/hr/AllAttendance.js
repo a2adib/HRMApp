@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View, Text, Button, StyleSheet } from 'react-native';
 import { getAttendanceLogs } from '../../services/storage';
+import { formatDisplayDate, formatTime } from '../../services/date';
 
 export default function AllAttendance() {
   const [logs, setLogs] = useState([]);
@@ -30,13 +31,17 @@ export default function AllAttendance() {
         <Button title="Employee" onPress={() => applyFilter('employee')} />
         <Button title="Manager" onPress={() => applyFilter('manager')} />
       </View>
-      {filtered.map((log, i) => (
-        <View key={i} style={styles.card}>
-          <Text>👤 {log.username} ({log.role})</Text>
-          <Text>📅 {log.date}</Text>
-          <Text>⏰ {log.time}</Text>
-        </View>
-      ))}
+      {filtered.length === 0 ? (
+        <Text>No attendance records yet.</Text>
+      ) : (
+        filtered.map((log) => (
+          <View key={`${log.username}-${log.date}`} style={styles.card}>
+            <Text>👤 {log.username} ({log.role})</Text>
+            <Text>📅 {formatDisplayDate(log.date)}</Text>
+            <Text>⏰ {formatTime(log.markedAt)}</Text>
+          </View>
+        ))
+      )}
     </ScrollView>
   );
 }

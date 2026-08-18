@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet, Picker } from 'react-native';
+import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { addUser, getUsers } from '../../services/users';
 
 export default function AddUser() {
@@ -22,22 +23,32 @@ export default function AddUser() {
   }, []);
 
   const handleAdd = async () => {
-    if (!username || !password) {
+    if (!username.trim() || !password) {
       Alert.alert('All fields are required');
       return;
     }
 
-    const newUser = {
-      username,
+    const result = await addUser({
+      username: username.trim(),
       password,
       role,
       manager: role === 'employee' ? selectedManager : null,
-    };
+    });
 
-    await addUser(newUser);
+    if (!result.ok) {
+      Alert.alert('Could not add user', result.error);
+      return;
+    }
+
     Alert.alert('✅ User added');
     setUsername('');
     setPassword('');
+
+    // A newly added manager must appear in the assignment list right away.
+    if (role === 'manager') {
+      const allUsers = await getUsers();
+      setManagers(allUsers.filter(u => u.role === 'manager'));
+    }
   };
 
   return (
@@ -48,6 +59,8 @@ export default function AddUser() {
         placeholder="Username"
         value={username}
         onChangeText={setUsername}
+        autoCapitalize="none"
+        autoCorrect={false}
         style={styles.input}
       />
       <TextInput
@@ -55,35 +68,38 @@ export default function AddUser() {
         value={password}
         secureTextEntry
         onChangeText={setPassword}
+        autoCapitalize="none"
         style={styles.input}
       />
 
       <Text style={styles.label}>Select Role</Text>
-      <Picker
-        selectedValue={role}
-        onValueChange={(itemValue) => setRole(itemValue)}
-        style={styles.input}
-      >
-        <Picker.Item label="Employee" value="employee" />
-        <Picker.Item label="Manager" value="manager" />
-      </Picker>
+      <View style={styles.input}>
+        <Picker
+          selectedValue={role}
+          onValueChange={(itemValue) => setRole(itemValue)}
+        >
+          <Picker.Item label="Employee" value="employee" />
+          <Picker.Item label="Manager" value="manager" />
+        </Picker>
+      </View>
 
       {role === 'employee' && managers.length > 0 && (
         <>
           <Text style={styles.label}>Assign to Manager</Text>
-          <Picker
-            selectedValue={selectedManager}
-            onValueChange={(itemValue) => setSelectedManager(itemValue)}
-            style={styles.input}
-          >
-            {managers.map((mgr) => (
-              <Picker.Item
-                label={mgr.username}
-                value={mgr.username}
-                key={mgr.username}
-              />
-            ))}
-          </Picker>
+          <View style={styles.input}>
+            <Picker
+              selectedValue={selectedManager}
+              onValueChange={(itemValue) => setSelectedManager(itemValue)}
+            >
+              {managers.map((mgr) => (
+                <Picker.Item
+                  label={mgr.username}
+                  value={mgr.username}
+                  key={mgr.username}
+                />
+              ))}
+            </Picker>
+          </View>
         </>
       )}
 
@@ -95,6 +111,6 @@ export default function AddUser() {
 const styles = StyleSheet.create({
   container: { padding: 20 },
   title: { fontSize: 22, marginBottom: 20, textAlign: 'center' },
-  input: { borderWidth: 1, padding: 10, borderRadius: 6, marginBottom: 10 },
+  input: { borderWidth: 1, borderColor: '#ccc', padding: 10, borderRadius: 6, marginBottom: 10 },
   label: { marginTop: 10, marginBottom: 5 },
 });

@@ -1,34 +1,56 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { AuthContext } from '../../context/AuthContext';
-import { getUsers } from '../../services/users';
+import { findUser } from '../../services/users';
 
 export default function LoginScreen() {
-  const { setRole, setUsername, updateLogin } = useContext(AuthContext);
+  const { updateLogin } = useContext(AuthContext);
 
   const [inputUsername, setInputUsername] = useState('');
   const [inputPassword, setInputPassword] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleLogin = async () => {
-    const users = await getUsers();
-    const user = users.find(
-      u => u.username === inputUsername && u.password === inputPassword
-    );
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      const user = await findUser(inputUsername);
 
-    if (!user) {
-      Alert.alert('Login Failed', 'Invalid username or password');
-      return;
+      if (!user || user.password !== inputPassword) {
+        Alert.alert('Login Failed', 'Invalid username or password');
+        return;
+      }
+
+      await updateLogin(user.username, user.role);
+    } catch (error) {
+      console.error('Login error:', error);
+      Alert.alert('Login Failed', 'Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
-
-    updateLogin(user.username, user.role);
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
-      <TextInput placeholder="Username" value={inputUsername} onChangeText={setInputUsername} style={styles.input} />
-      <TextInput placeholder="Password" value={inputPassword} onChangeText={setInputPassword} secureTextEntry style={styles.input} />
-      <Button title="Login" onPress={handleLogin} />
+      <TextInput
+        placeholder="Username"
+        value={inputUsername}
+        onChangeText={setInputUsername}
+        autoCapitalize="none"
+        autoCorrect={false}
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="Password"
+        value={inputPassword}
+        onChangeText={setInputPassword}
+        secureTextEntry
+        autoCapitalize="none"
+        onSubmitEditing={handleLogin}
+        style={styles.input}
+      />
+      <Button title={isSubmitting ? 'Signing in…' : 'Login'} onPress={handleLogin} disabled={isSubmitting} />
     </View>
   );
 }
