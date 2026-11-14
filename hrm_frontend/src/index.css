@@ -1,7 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-gray-50 text-gray-900 antialiased;
+@layer base {
+  :root {
+    --bg-canvas: #F8FAFC;
+    --bg-surface: #FFFFFF;
+    --bg-subtle: #F1F5F9;
+    --border-main: #E2E8F0;
+    --border-subtle: #F1F5F9;
+    --text-main: #0F172A;
+    --text-body: #334155;
+    --text-muted: #64748B;
+  }
+
+  .dark {
+    --bg-canvas: #090A0F;
+    --bg-surface: #11131B;
+    --bg-subtle: #181B26;
+    --border-main: #232738;
+    --border-subtle: #1E2230;
+    --text-main: #F8FAFC;
+    --text-body: #CBD5E1;
+    --text-muted: #64748B;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased font-sans;
+    font-feature-settings: 'cv02' 1, 'cv03' 1, 'cv04' 1, 'cv11' 1;
+  }
+
+  .dark body {
+    @apply bg-[#0B0F17] text-slate-100;
+  }
+}
+
+@layer utilities {
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Crisp 1px scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.45);
 }
