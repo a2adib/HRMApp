@@ -1,6 +1,6 @@
 import datetime
 from django.utils import timezone
-from django.db import transaction
+from django.db import transaction, models
 from .models import AttendanceRecord, AttendanceEvent
 from apps.shifts.models import Shift, EmployeeShift
 from apps.holidays.models import Holiday

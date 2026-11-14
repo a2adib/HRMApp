@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 from django.utils import timezone
 from django.db import transaction
 from django.core.exceptions import ValidationError
@@ -14,7 +15,7 @@ def calculate_business_days(start_date, end_date):
         if current.weekday() < 5:  # Monday to Friday
             days += 1
         current += datetime.timedelta(days=1)
-    return float(days) if days > 0 else 1.0
+    return Decimal(str(days)) if days > 0 else Decimal('1.0')
 
 
 @transaction.atomic

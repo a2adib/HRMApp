@@ -1,0 +1,6666 @@
+openapi: 3.0.3
+info:
+  title: Enterprise HR Management Platform API
+  version: 1.0.0
+  description: Production REST API for Enterprise HR Platform with Wi-Fi Attendance
+    Integration
+paths:
+  /api/v1/access-points/:
+    get:
+      operationId: v1_access_points_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAccessPointList'
+          description: ''
+    post:
+      operationId: v1_access_points_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccessPoint'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AccessPoint'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AccessPoint'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessPoint'
+          description: ''
+  /api/v1/access-points/{id}/:
+    get:
+      operationId: v1_access_points_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessPoint'
+          description: ''
+    put:
+      operationId: v1_access_points_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccessPoint'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AccessPoint'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AccessPoint'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessPoint'
+          description: ''
+    patch:
+      operationId: v1_access_points_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAccessPoint'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAccessPoint'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAccessPoint'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessPoint'
+          description: ''
+    delete:
+      operationId: v1_access_points_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/announcements/:
+    get:
+      operationId: v1_announcements_list
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAnnouncementList'
+          description: ''
+    post:
+      operationId: v1_announcements_create
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Announcement'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Announcement'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Announcement'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Announcement'
+          description: ''
+  /api/v1/announcements/{id}/:
+    get:
+      operationId: v1_announcements_retrieve
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this announcement.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Announcement'
+          description: ''
+    put:
+      operationId: v1_announcements_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this announcement.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Announcement'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Announcement'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Announcement'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Announcement'
+          description: ''
+    patch:
+      operationId: v1_announcements_partial_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this announcement.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAnnouncement'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAnnouncement'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAnnouncement'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Announcement'
+          description: ''
+    delete:
+      operationId: v1_announcements_destroy
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this announcement.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/attendance/adjustments/:
+    get:
+      operationId: v1_attendance_adjustments_list
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAttendanceAdjustmentList'
+          description: ''
+    post:
+      operationId: v1_attendance_adjustments_create
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttendanceAdjustment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AttendanceAdjustment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AttendanceAdjustment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttendanceAdjustment'
+          description: ''
+  /api/v1/attendance/adjustments/{id}/:
+    get:
+      operationId: v1_attendance_adjustments_retrieve
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this attendance adjustment.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttendanceAdjustment'
+          description: ''
+    put:
+      operationId: v1_attendance_adjustments_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this attendance adjustment.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttendanceAdjustment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AttendanceAdjustment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AttendanceAdjustment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttendanceAdjustment'
+          description: ''
+    patch:
+      operationId: v1_attendance_adjustments_partial_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this attendance adjustment.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAttendanceAdjustment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAttendanceAdjustment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAttendanceAdjustment'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttendanceAdjustment'
+          description: ''
+    delete:
+      operationId: v1_attendance_adjustments_destroy
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this attendance adjustment.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/attendance/adjustments/{id}/approve/:
+    post:
+      operationId: v1_attendance_adjustments_approve_create
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this attendance adjustment.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttendanceAdjustment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AttendanceAdjustment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AttendanceAdjustment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttendanceAdjustment'
+          description: ''
+  /api/v1/attendance/adjustments/{id}/reject/:
+    post:
+      operationId: v1_attendance_adjustments_reject_create
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this attendance adjustment.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttendanceAdjustment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AttendanceAdjustment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AttendanceAdjustment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttendanceAdjustment'
+          description: ''
+  /api/v1/attendance/check-in/:
+    post:
+      operationId: v1_attendance_check_in_create
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/attendance/check-out/:
+    post:
+      operationId: v1_attendance_check_out_create
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/attendance/history/:
+    get:
+      operationId: v1_attendance_history_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAttendanceRecordList'
+          description: ''
+  /api/v1/attendance/monthly/:
+    get:
+      operationId: v1_attendance_monthly_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/attendance/team/:
+    get:
+      operationId: v1_attendance_team_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/attendance/today/:
+    get:
+      operationId: v1_attendance_today_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/audit-logs/:
+    get:
+      operationId: v1_audit_logs_list
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: query
+        name: action
+        schema:
+          type: string
+          enum:
+          - ADJUST
+          - AUTH
+          - CREATE
+          - DELETE
+          - UPDATE
+        description: |-
+          * `CREATE` - Create Entity
+          * `UPDATE` - Update Entity
+          * `DELETE` - Delete Entity
+          * `ADJUST` - Attendance Adjustment
+          * `AUTH` - Authentication Event
+      - in: query
+        name: entity_name
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: user
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAuditLogList'
+          description: ''
+    post:
+      operationId: v1_audit_logs_create
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditLog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuditLog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AuditLog'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditLog'
+          description: ''
+  /api/v1/audit-logs/{id}/:
+    get:
+      operationId: v1_audit_logs_retrieve
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this audit log.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditLog'
+          description: ''
+    put:
+      operationId: v1_audit_logs_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this audit log.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditLog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuditLog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AuditLog'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditLog'
+          description: ''
+    patch:
+      operationId: v1_audit_logs_partial_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this audit log.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAuditLog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAuditLog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAuditLog'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditLog'
+          description: ''
+    delete:
+      operationId: v1_audit_logs_destroy
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this audit log.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/auth/login/:
+    post:
+      operationId: v1_auth_login_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomTokenObtainPair'
+          description: ''
+  /api/v1/auth/logout/:
+    post:
+      operationId: v1_auth_logout_create
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/me/:
+    get:
+      operationId: v1_auth_me_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+  /api/v1/auth/refresh/:
+    post:
+      operationId: v1_auth_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/v1/auth/users/:
+    get:
+      operationId: v1_auth_users_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserList'
+          description: ''
+    post:
+      operationId: v1_auth_users_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/v1/dashboard/employee/:
+    get:
+      operationId: v1_dashboard_employee_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/dashboard/hr/:
+    get:
+      operationId: v1_dashboard_hr_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/dashboard/manager/:
+    get:
+      operationId: v1_dashboard_manager_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/departments/:
+    get:
+      operationId: v1_departments_list
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDepartmentList'
+          description: ''
+    post:
+      operationId: v1_departments_create
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Department'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Department'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Department'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Department'
+          description: ''
+  /api/v1/departments/{id}/:
+    get:
+      operationId: v1_departments_retrieve
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this department.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Department'
+          description: ''
+    put:
+      operationId: v1_departments_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this department.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Department'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Department'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Department'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Department'
+          description: ''
+    patch:
+      operationId: v1_departments_partial_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this department.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDepartment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDepartment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDepartment'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Department'
+          description: ''
+    delete:
+      operationId: v1_departments_destroy
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this department.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/designations/:
+    get:
+      operationId: v1_designations_list
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: query
+        name: department
+        schema:
+          type: string
+          format: uuid
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDesignationList'
+          description: ''
+    post:
+      operationId: v1_designations_create
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Designation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Designation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Designation'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Designation'
+          description: ''
+  /api/v1/designations/{id}/:
+    get:
+      operationId: v1_designations_retrieve
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this designation.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Designation'
+          description: ''
+    put:
+      operationId: v1_designations_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this designation.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Designation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Designation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Designation'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Designation'
+          description: ''
+    patch:
+      operationId: v1_designations_partial_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this designation.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDesignation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDesignation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDesignation'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Designation'
+          description: ''
+    delete:
+      operationId: v1_designations_destroy
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this designation.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/employee-shifts/:
+    get:
+      operationId: v1_employee_shifts_list
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: query
+        name: employee
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: shift
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEmployeeShiftList'
+          description: ''
+    post:
+      operationId: v1_employee_shifts_create
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeShift'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EmployeeShift'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EmployeeShift'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeShift'
+          description: ''
+  /api/v1/employee-shifts/{id}/:
+    get:
+      operationId: v1_employee_shifts_retrieve
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this employee shift.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeShift'
+          description: ''
+    put:
+      operationId: v1_employee_shifts_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this employee shift.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeShift'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EmployeeShift'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EmployeeShift'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeShift'
+          description: ''
+    patch:
+      operationId: v1_employee_shifts_partial_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this employee shift.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedEmployeeShift'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedEmployeeShift'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedEmployeeShift'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeShift'
+          description: ''
+    delete:
+      operationId: v1_employee_shifts_destroy
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this employee shift.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/employees/:
+    get:
+      operationId: v1_employees_list
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: query
+        name: department
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: designation
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: employment_status
+        schema:
+          type: string
+          enum:
+          - ACTIVE
+          - PROBATION
+          - SUSPENDED
+          - TERMINATED
+        description: |-
+          * `ACTIVE` - Active
+          * `PROBATION` - Probation
+          * `SUSPENDED` - Suspended
+          * `TERMINATED` - Terminated
+      - in: query
+        name: office
+        schema:
+          type: string
+          format: uuid
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEmployeeList'
+          description: ''
+    post:
+      operationId: v1_employees_create
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Employee'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Employee'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+          description: ''
+  /api/v1/employees/{id}/:
+    get:
+      operationId: v1_employees_retrieve
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this employee.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+          description: ''
+    put:
+      operationId: v1_employees_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this employee.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Employee'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Employee'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+          description: ''
+    patch:
+      operationId: v1_employees_partial_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this employee.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedEmployee'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedEmployee'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedEmployee'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+          description: ''
+    delete:
+      operationId: v1_employees_destroy
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this employee.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/holidays/:
+    get:
+      operationId: v1_holidays_list
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: query
+        name: holiday_date
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: office
+        schema:
+          type: string
+          format: uuid
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedHolidayList'
+          description: ''
+    post:
+      operationId: v1_holidays_create
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Holiday'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Holiday'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Holiday'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Holiday'
+          description: ''
+  /api/v1/holidays/{id}/:
+    get:
+      operationId: v1_holidays_retrieve
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this holiday.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Holiday'
+          description: ''
+    put:
+      operationId: v1_holidays_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this holiday.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Holiday'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Holiday'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Holiday'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Holiday'
+          description: ''
+    patch:
+      operationId: v1_holidays_partial_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this holiday.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedHoliday'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedHoliday'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedHoliday'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Holiday'
+          description: ''
+    delete:
+      operationId: v1_holidays_destroy
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this holiday.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/internal/wifi-events/:
+    post:
+      operationId: v1_internal_wifi_events_create
+      description: |-
+        Internal M2M Ingestion endpoint for RADIUS accounting events.
+        Requires X-Service-Token header for machine authentication.
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/leaves/:
+    get:
+      operationId: v1_leaves_list
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: query
+        name: employee
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: leave_type
+        schema:
+          type: string
+          format: uuid
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - APPROVED
+          - CANCELLED
+          - PENDING
+          - REJECTED
+        description: |-
+          * `PENDING` - Pending Approval
+          * `APPROVED` - Approved
+          * `REJECTED` - Rejected
+          * `CANCELLED` - Cancelled
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLeaveRequestList'
+          description: ''
+    post:
+      operationId: v1_leaves_create
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeaveRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LeaveRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LeaveRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaveRequest'
+          description: ''
+  /api/v1/leaves/{id}/:
+    get:
+      operationId: v1_leaves_retrieve
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this leave request.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaveRequest'
+          description: ''
+    put:
+      operationId: v1_leaves_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this leave request.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeaveRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LeaveRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LeaveRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaveRequest'
+          description: ''
+    patch:
+      operationId: v1_leaves_partial_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this leave request.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLeaveRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLeaveRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLeaveRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaveRequest'
+          description: ''
+    delete:
+      operationId: v1_leaves_destroy
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this leave request.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/leaves/{id}/approve/:
+    post:
+      operationId: v1_leaves_approve_create
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this leave request.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeaveRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LeaveRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LeaveRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaveRequest'
+          description: ''
+  /api/v1/leaves/{id}/reject/:
+    post:
+      operationId: v1_leaves_reject_create
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this leave request.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeaveRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LeaveRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LeaveRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaveRequest'
+          description: ''
+  /api/v1/leaves/balances/:
+    get:
+      operationId: v1_leaves_balances_list
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: query
+        name: employee
+        schema:
+          type: string
+          format: uuid
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: year
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLeaveBalanceList'
+          description: ''
+    post:
+      operationId: v1_leaves_balances_create
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeaveBalance'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LeaveBalance'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LeaveBalance'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaveBalance'
+          description: ''
+  /api/v1/leaves/balances/{id}/:
+    get:
+      operationId: v1_leaves_balances_retrieve
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this leave balance.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaveBalance'
+          description: ''
+    put:
+      operationId: v1_leaves_balances_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this leave balance.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeaveBalance'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LeaveBalance'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LeaveBalance'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaveBalance'
+          description: ''
+    patch:
+      operationId: v1_leaves_balances_partial_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this leave balance.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLeaveBalance'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLeaveBalance'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLeaveBalance'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaveBalance'
+          description: ''
+    delete:
+      operationId: v1_leaves_balances_destroy
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this leave balance.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/leaves/types/:
+    get:
+      operationId: v1_leaves_types_list
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLeaveTypeList'
+          description: ''
+    post:
+      operationId: v1_leaves_types_create
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeaveType'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LeaveType'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LeaveType'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaveType'
+          description: ''
+  /api/v1/leaves/types/{id}/:
+    get:
+      operationId: v1_leaves_types_retrieve
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this leave type.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaveType'
+          description: ''
+    put:
+      operationId: v1_leaves_types_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this leave type.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeaveType'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LeaveType'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LeaveType'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaveType'
+          description: ''
+    patch:
+      operationId: v1_leaves_types_partial_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this leave type.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLeaveType'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLeaveType'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLeaveType'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaveType'
+          description: ''
+    delete:
+      operationId: v1_leaves_types_destroy
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this leave type.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/notifications/:
+    get:
+      operationId: v1_notifications_list
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedNotificationList'
+          description: ''
+    post:
+      operationId: v1_notifications_create
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Notification'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+  /api/v1/notifications/{id}/:
+    get:
+      operationId: v1_notifications_retrieve
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this notification.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+    put:
+      operationId: v1_notifications_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this notification.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Notification'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+    patch:
+      operationId: v1_notifications_partial_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this notification.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedNotification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedNotification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedNotification'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+    delete:
+      operationId: v1_notifications_destroy
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this notification.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/notifications/{id}/mark_read/:
+    post:
+      operationId: v1_notifications_mark_read_create
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this notification.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Notification'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+  /api/v1/notifications/mark_all_read/:
+    post:
+      operationId: v1_notifications_mark_all_read_create
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Notification'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+  /api/v1/offices/:
+    get:
+      operationId: v1_offices_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOfficeList'
+          description: ''
+    post:
+      operationId: v1_offices_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Office'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Office'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Office'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Office'
+          description: ''
+  /api/v1/offices/{id}/:
+    get:
+      operationId: v1_offices_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Office'
+          description: ''
+    put:
+      operationId: v1_offices_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Office'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Office'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Office'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Office'
+          description: ''
+    patch:
+      operationId: v1_offices_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOffice'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedOffice'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedOffice'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Office'
+          description: ''
+    delete:
+      operationId: v1_offices_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/organizations/:
+    get:
+      operationId: v1_organizations_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrganizationList'
+          description: ''
+    post:
+      operationId: v1_organizations_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organization'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Organization'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Organization'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+          description: ''
+  /api/v1/organizations/{id}/:
+    get:
+      operationId: v1_organizations_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+          description: ''
+    put:
+      operationId: v1_organizations_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organization'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Organization'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Organization'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+          description: ''
+    patch:
+      operationId: v1_organizations_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrganization'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedOrganization'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedOrganization'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+          description: ''
+    delete:
+      operationId: v1_organizations_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/payroll/summary/:
+    get:
+      operationId: v1_payroll_summary_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reports/attendance/:
+    get:
+      operationId: v1_reports_attendance_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reports/leave/:
+    get:
+      operationId: v1_reports_leave_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/shifts/:
+    get:
+      operationId: v1_shifts_list
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedShiftList'
+          description: ''
+    post:
+      operationId: v1_shifts_create
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Shift'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Shift'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Shift'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shift'
+          description: ''
+  /api/v1/shifts/{id}/:
+    get:
+      operationId: v1_shifts_retrieve
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this shift.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shift'
+          description: ''
+    put:
+      operationId: v1_shifts_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this shift.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Shift'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Shift'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Shift'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shift'
+          description: ''
+    patch:
+      operationId: v1_shifts_partial_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this shift.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedShift'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedShift'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedShift'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shift'
+          description: ''
+    delete:
+      operationId: v1_shifts_destroy
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this shift.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/wifi-sessions/:
+    get:
+      operationId: v1_wifi_sessions_list
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: query
+        name: access_point
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: employee
+        schema:
+          type: string
+          format: uuid
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: raw_username
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - ERROR
+          - IGNORED
+          - PENDING
+          - PROCESSED
+        description: |-
+          * `PENDING` - Pending Processing
+          * `PROCESSED` - Processed into Attendance
+          * `IGNORED` - Ignored (Unknown AP or User)
+          * `ERROR` - Error during processing
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedWiFiSessionList'
+          description: ''
+    post:
+      operationId: v1_wifi_sessions_create
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WiFiSession'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WiFiSession'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WiFiSession'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WiFiSession'
+          description: ''
+  /api/v1/wifi-sessions/{id}/:
+    get:
+      operationId: v1_wifi_sessions_retrieve
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this wi fi session.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WiFiSession'
+          description: ''
+    put:
+      operationId: v1_wifi_sessions_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this wi fi session.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WiFiSession'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WiFiSession'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WiFiSession'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WiFiSession'
+          description: ''
+    patch:
+      operationId: v1_wifi_sessions_partial_update
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this wi fi session.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedWiFiSession'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedWiFiSession'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedWiFiSession'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WiFiSession'
+          description: ''
+    delete:
+      operationId: v1_wifi_sessions_destroy
+      description: |-
+        Base ModelViewSet that enforces:
+        1. Authentication requirement.
+        2. Tenant object permission checks.
+        3. Automatic organization assignment on creation.
+        4. Tenant-scoped querysets.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this wi fi session.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    AccessPoint:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        office_name:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        mac_address:
+          type: string
+          maxLength: 32
+        ip_address:
+          type: string
+          nullable: true
+        location_description:
+          type: string
+          nullable: true
+          maxLength: 255
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        organization:
+          type: string
+          format: uuid
+        office:
+          type: string
+          format: uuid
+      required:
+      - created_at
+      - id
+      - mac_address
+      - name
+      - office
+      - office_name
+      - organization
+      - updated_at
+    ActionEnum:
+      enum:
+      - CREATE
+      - UPDATE
+      - DELETE
+      - ADJUST
+      - AUTH
+      type: string
+      description: |-
+        * `CREATE` - Create Entity
+        * `UPDATE` - Update Entity
+        * `DELETE` - Delete Entity
+        * `ADJUST` - Attendance Adjustment
+        * `AUTH` - Authentication Event
+    Announcement:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        publisher_name:
+          type: string
+          format: email
+          readOnly: true
+        department_name:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+        title:
+          type: string
+          maxLength: 255
+        content:
+          type: string
+        is_pinned:
+          type: boolean
+        publish_date:
+          type: string
+          format: date-time
+          readOnly: true
+        expires_at:
+          type: string
+          format: date-time
+          nullable: true
+        organization:
+          type: string
+          format: uuid
+        published_by:
+          type: string
+          format: uuid
+          readOnly: true
+        target_department:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - content
+      - created_at
+      - department_name
+      - id
+      - organization
+      - publish_date
+      - published_by
+      - publisher_name
+      - title
+      - updated_at
+    AttendanceAdjustment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        employee_name:
+          type: string
+          readOnly: true
+        reviewer_name:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+        original_status:
+          type: string
+          maxLength: 32
+        requested_status:
+          $ref: '#/components/schemas/RequestedStatusEnum'
+        original_check_in:
+          type: string
+          format: date-time
+          nullable: true
+        requested_check_in:
+          type: string
+          format: date-time
+          nullable: true
+        original_check_out:
+          type: string
+          format: date-time
+          nullable: true
+        requested_check_out:
+          type: string
+          format: date-time
+          nullable: true
+        reason:
+          type: string
+        review_status:
+          $ref: '#/components/schemas/ReviewStatusEnum'
+        review_notes:
+          type: string
+          nullable: true
+        reviewed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        organization:
+          type: string
+          format: uuid
+        attendance_record:
+          type: string
+          format: uuid
+        requested_by:
+          type: string
+          format: uuid
+          readOnly: true
+        reviewed_by:
+          type: string
+          format: uuid
+          readOnly: true
+          nullable: true
+      required:
+      - attendance_record
+      - created_at
+      - employee_name
+      - id
+      - organization
+      - original_status
+      - reason
+      - requested_by
+      - requested_status
+      - reviewed_at
+      - reviewed_by
+      - reviewer_name
+      - updated_at
+    AttendanceEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+        event_type:
+          $ref: '#/components/schemas/EventTypeEnum'
+        timestamp:
+          type: string
+          format: date-time
+        source:
+          $ref: '#/components/schemas/AttendanceEventSourceEnum'
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+        metadata: {}
+        organization:
+          type: string
+          format: uuid
+        attendance_record:
+          type: string
+          format: uuid
+        employee:
+          type: string
+          format: uuid
+        access_point:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - attendance_record
+      - created_at
+      - employee
+      - event_type
+      - id
+      - organization
+      - timestamp
+      - updated_at
+    AttendanceEventSourceEnum:
+      enum:
+      - WIFI
+      - MOBILE_APP
+      - WEB_PORTAL
+      - ADMIN
+      type: string
+      description: |-
+        * `WIFI` - Wi-Fi Ingest
+        * `MOBILE_APP` - Mobile App
+        * `WEB_PORTAL` - Web Portal
+        * `ADMIN` - Admin Intervention
+    AttendanceRecord:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        employee_name:
+          type: string
+          readOnly: true
+        employee_code:
+          type: string
+          readOnly: true
+        department_name:
+          type: string
+          readOnly: true
+        shift_name:
+          type: string
+          readOnly: true
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttendanceEvent'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+        attendance_date:
+          type: string
+          format: date
+        first_check_in:
+          type: string
+          format: date-time
+          nullable: true
+        last_check_out:
+          type: string
+          format: date-time
+          nullable: true
+        total_work_minutes:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        late_minutes:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        early_departure_minutes:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        overtime_minutes:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        status:
+          $ref: '#/components/schemas/Status6a3Enum'
+        source:
+          $ref: '#/components/schemas/AttendanceRecordSourceEnum'
+        is_finalized:
+          type: boolean
+        notes:
+          type: string
+          nullable: true
+        organization:
+          type: string
+          format: uuid
+        employee:
+          type: string
+          format: uuid
+        shift:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - attendance_date
+      - created_at
+      - department_name
+      - employee
+      - employee_code
+      - employee_name
+      - events
+      - id
+      - organization
+      - shift_name
+      - updated_at
+    AttendanceRecordSourceEnum:
+      enum:
+      - WIFI
+      - MANUAL
+      - ADMIN_CORRECTION
+      type: string
+      description: |-
+        * `WIFI` - Wi-Fi Tracking
+        * `MANUAL` - Manual Punch
+        * `ADMIN_CORRECTION` - Admin Correction
+    AuditLog:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        user_email:
+          type: string
+          format: email
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+        action:
+          $ref: '#/components/schemas/ActionEnum'
+        entity_name:
+          type: string
+          maxLength: 64
+        entity_id:
+          type: string
+          maxLength: 64
+        ip_address:
+          type: string
+          nullable: true
+        user_agent:
+          type: string
+          nullable: true
+        diff: {}
+        organization:
+          type: string
+          format: uuid
+        user:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - action
+      - created_at
+      - entity_id
+      - entity_name
+      - id
+      - organization
+      - updated_at
+      - user_email
+    CustomTokenObtainPair:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+    Department:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        designations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Designation'
+          readOnly: true
+        employee_count:
+          type: string
+          readOnly: true
+        head_name:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        code:
+          type: string
+          maxLength: 50
+        organization:
+          type: string
+          format: uuid
+        parent:
+          type: string
+          format: uuid
+          nullable: true
+        head_of_department:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - code
+      - created_at
+      - designations
+      - employee_count
+      - head_name
+      - id
+      - is_deleted
+      - name
+      - organization
+      - updated_at
+    Designation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        department_name:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        code:
+          type: string
+          maxLength: 50
+        level:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        organization:
+          type: string
+          format: uuid
+        department:
+          type: string
+          format: uuid
+      required:
+      - code
+      - created_at
+      - department
+      - department_name
+      - id
+      - is_deleted
+      - organization
+      - title
+      - updated_at
+    Employee:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        employee_code:
+          type: string
+          maxLength: 50
+        first_name:
+          type: string
+          maxLength: 100
+        last_name:
+          type: string
+          maxLength: 100
+        work_email:
+          type: string
+          format: email
+          maxLength: 255
+        phone_number:
+          type: string
+          nullable: true
+          maxLength: 32
+        gender:
+          type: string
+          nullable: true
+          maxLength: 16
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        joining_date:
+          type: string
+          format: date
+        employment_status:
+          $ref: '#/components/schemas/EmploymentStatusEnum'
+        department:
+          type: string
+          format: uuid
+        department_name:
+          type: string
+          readOnly: true
+        designation:
+          type: string
+          format: uuid
+        designation_title:
+          type: string
+          readOnly: true
+        office:
+          type: string
+          format: uuid
+        office_name:
+          type: string
+          readOnly: true
+        manager:
+          type: string
+          format: uuid
+          nullable: true
+        manager_name:
+          type: string
+          readOnly: true
+        network_username:
+          type: string
+          nullable: true
+          description: RADIUS Accounting User-Name for passive Wi-Fi attendance
+          maxLength: 128
+        avatar_url:
+          nullable: true
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 512
+          - type: string
+            maxLength: 0
+        role:
+          type: string
+          writeOnly: true
+          default: EMPLOYEE
+        password:
+          type: string
+          writeOnly: true
+          default: Welcome123!
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - department
+      - department_name
+      - designation
+      - designation_title
+      - employee_code
+      - first_name
+      - id
+      - joining_date
+      - last_name
+      - manager_name
+      - office
+      - office_name
+      - updated_at
+      - work_email
+    EmployeeShift:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        shift_name:
+          type: string
+          readOnly: true
+        employee_name:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+          readOnly: true
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+          nullable: true
+        is_active:
+          type: boolean
+        organization:
+          type: string
+          format: uuid
+        employee:
+          type: string
+          format: uuid
+        shift:
+          type: string
+          format: uuid
+      required:
+      - created_at
+      - employee
+      - employee_name
+      - id
+      - is_deleted
+      - organization
+      - shift
+      - shift_name
+      - start_date
+      - updated_at
+    EmploymentStatusEnum:
+      enum:
+      - ACTIVE
+      - PROBATION
+      - SUSPENDED
+      - TERMINATED
+      type: string
+      description: |-
+        * `ACTIVE` - Active
+        * `PROBATION` - Probation
+        * `SUSPENDED` - Suspended
+        * `TERMINATED` - Terminated
+    EventTypeEnum:
+      enum:
+      - CHECK_IN
+      - CHECK_OUT
+      - WIFI_ASSOCIATION
+      - WIFI_DISASSOCIATION
+      type: string
+      description: |-
+        * `CHECK_IN` - Check In
+        * `CHECK_OUT` - Check Out
+        * `WIFI_ASSOCIATION` - Wi-Fi Association
+        * `WIFI_DISASSOCIATION` - Wi-Fi Disassociation
+    Holiday:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        office_name:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        holiday_date:
+          type: string
+          format: date
+        is_recurring:
+          type: boolean
+        description:
+          type: string
+          nullable: true
+        organization:
+          type: string
+          format: uuid
+        office:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - created_at
+      - holiday_date
+      - id
+      - is_deleted
+      - name
+      - office_name
+      - organization
+      - updated_at
+    LeaveBalance:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        leave_type_name:
+          type: string
+          readOnly: true
+        leave_type_code:
+          type: string
+          readOnly: true
+        is_paid:
+          type: boolean
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+        year:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        allocated_days:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,1})?$
+        used_days:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,1})?$
+        pending_days:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,1})?$
+        remaining_days:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,1})?$
+        organization:
+          type: string
+          format: uuid
+        employee:
+          type: string
+          format: uuid
+        leave_type:
+          type: string
+          format: uuid
+      required:
+      - created_at
+      - employee
+      - id
+      - is_paid
+      - leave_type
+      - leave_type_code
+      - leave_type_name
+      - organization
+      - updated_at
+      - year
+    LeaveRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        employee_name:
+          type: string
+          readOnly: true
+        employee_code:
+          type: string
+          readOnly: true
+        department_name:
+          type: string
+          readOnly: true
+        leave_type_name:
+          type: string
+          readOnly: true
+        reviewer_email:
+          type: string
+          format: email
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        total_days:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,1})?$
+          readOnly: true
+        reason:
+          type: string
+        attachment_url:
+          nullable: true
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 512
+          - type: string
+            maxLength: 0
+        status:
+          allOf:
+          - $ref: '#/components/schemas/LeaveRequestStatusEnum'
+          readOnly: true
+        review_notes:
+          type: string
+          nullable: true
+        reviewed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        organization:
+          type: string
+          format: uuid
+        employee:
+          type: string
+          format: uuid
+          readOnly: true
+        leave_type:
+          type: string
+          format: uuid
+        reviewed_by:
+          type: string
+          format: uuid
+          readOnly: true
+          nullable: true
+      required:
+      - created_at
+      - department_name
+      - employee
+      - employee_code
+      - employee_name
+      - end_date
+      - id
+      - leave_type
+      - leave_type_name
+      - organization
+      - reason
+      - reviewed_at
+      - reviewed_by
+      - reviewer_email
+      - start_date
+      - status
+      - total_days
+      - updated_at
+    LeaveRequestStatusEnum:
+      enum:
+      - PENDING
+      - APPROVED
+      - REJECTED
+      - CANCELLED
+      type: string
+      description: |-
+        * `PENDING` - Pending Approval
+        * `APPROVED` - Approved
+        * `REJECTED` - Rejected
+        * `CANCELLED` - Cancelled
+    LeaveType:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        code:
+          type: string
+          maxLength: 50
+        default_quota_days:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,1})?$
+        is_paid:
+          type: boolean
+        requires_attachment:
+          type: boolean
+        max_carryover_days:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,1})?$
+        organization:
+          type: string
+          format: uuid
+      required:
+      - code
+      - created_at
+      - id
+      - is_deleted
+      - name
+      - organization
+      - updated_at
+    Notification:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+        title:
+          type: string
+          maxLength: 255
+        message:
+          type: string
+        notification_type:
+          $ref: '#/components/schemas/NotificationTypeEnum'
+        is_read:
+          type: boolean
+        action_url:
+          type: string
+          nullable: true
+          maxLength: 255
+        organization:
+          type: string
+          format: uuid
+        recipient:
+          type: string
+          format: uuid
+      required:
+      - created_at
+      - id
+      - message
+      - organization
+      - recipient
+      - title
+      - updated_at
+    NotificationTypeEnum:
+      enum:
+      - ATTENDANCE
+      - LEAVE
+      - ANNOUNCEMENT
+      - SYSTEM
+      type: string
+      description: |-
+        * `ATTENDANCE` - Attendance Alert
+        * `LEAVE` - Leave Update
+        * `ANNOUNCEMENT` - Company Announcement
+        * `SYSTEM` - System Alert
+    Office:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organization_name:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        address:
+          type: string
+          nullable: true
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+        radius_meters:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        timezone:
+          type: string
+          maxLength: 64
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        organization:
+          type: string
+          format: uuid
+      required:
+      - created_at
+      - id
+      - name
+      - organization
+      - organization_name
+      - updated_at
+    Organization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        slug:
+          type: string
+          maxLength: 100
+          pattern: ^[-a-zA-Z0-9_]+$
+        domain:
+          type: string
+          nullable: true
+          maxLength: 255
+        timezone:
+          type: string
+          maxLength: 64
+        logo_url:
+          nullable: true
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 512
+          - type: string
+            maxLength: 0
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - name
+      - slug
+      - updated_at
+    PaginatedAccessPointList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessPoint'
+    PaginatedAnnouncementList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Announcement'
+    PaginatedAttendanceAdjustmentList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttendanceAdjustment'
+    PaginatedAttendanceRecordList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttendanceRecord'
+    PaginatedAuditLogList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLog'
+    PaginatedDepartmentList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Department'
+    PaginatedDesignationList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Designation'
+    PaginatedEmployeeList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Employee'
+    PaginatedEmployeeShiftList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmployeeShift'
+    PaginatedHolidayList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Holiday'
+    PaginatedLeaveBalanceList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LeaveBalance'
+    PaginatedLeaveRequestList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LeaveRequest'
+    PaginatedLeaveTypeList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LeaveType'
+    PaginatedNotificationList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notification'
+    PaginatedOfficeList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Office'
+    PaginatedOrganizationList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
+    PaginatedShiftList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Shift'
+    PaginatedUserList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    PaginatedWiFiSessionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/WiFiSession'
+    PatchedAccessPoint:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        office_name:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        mac_address:
+          type: string
+          maxLength: 32
+        ip_address:
+          type: string
+          nullable: true
+        location_description:
+          type: string
+          nullable: true
+          maxLength: 255
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        organization:
+          type: string
+          format: uuid
+        office:
+          type: string
+          format: uuid
+    PatchedAnnouncement:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        publisher_name:
+          type: string
+          format: email
+          readOnly: true
+        department_name:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+        title:
+          type: string
+          maxLength: 255
+        content:
+          type: string
+        is_pinned:
+          type: boolean
+        publish_date:
+          type: string
+          format: date-time
+          readOnly: true
+        expires_at:
+          type: string
+          format: date-time
+          nullable: true
+        organization:
+          type: string
+          format: uuid
+        published_by:
+          type: string
+          format: uuid
+          readOnly: true
+        target_department:
+          type: string
+          format: uuid
+          nullable: true
+    PatchedAttendanceAdjustment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        employee_name:
+          type: string
+          readOnly: true
+        reviewer_name:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+        original_status:
+          type: string
+          maxLength: 32
+        requested_status:
+          $ref: '#/components/schemas/RequestedStatusEnum'
+        original_check_in:
+          type: string
+          format: date-time
+          nullable: true
+        requested_check_in:
+          type: string
+          format: date-time
+          nullable: true
+        original_check_out:
+          type: string
+          format: date-time
+          nullable: true
+        requested_check_out:
+          type: string
+          format: date-time
+          nullable: true
+        reason:
+          type: string
+        review_status:
+          $ref: '#/components/schemas/ReviewStatusEnum'
+        review_notes:
+          type: string
+          nullable: true
+        reviewed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        organization:
+          type: string
+          format: uuid
+        attendance_record:
+          type: string
+          format: uuid
+        requested_by:
+          type: string
+          format: uuid
+          readOnly: true
+        reviewed_by:
+          type: string
+          format: uuid
+          readOnly: true
+          nullable: true
+    PatchedAuditLog:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        user_email:
+          type: string
+          format: email
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+        action:
+          $ref: '#/components/schemas/ActionEnum'
+        entity_name:
+          type: string
+          maxLength: 64
+        entity_id:
+          type: string
+          maxLength: 64
+        ip_address:
+          type: string
+          nullable: true
+        user_agent:
+          type: string
+          nullable: true
+        diff: {}
+        organization:
+          type: string
+          format: uuid
+        user:
+          type: string
+          format: uuid
+          nullable: true
+    PatchedDepartment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        designations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Designation'
+          readOnly: true
+        employee_count:
+          type: string
+          readOnly: true
+        head_name:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        code:
+          type: string
+          maxLength: 50
+        organization:
+          type: string
+          format: uuid
+        parent:
+          type: string
+          format: uuid
+          nullable: true
+        head_of_department:
+          type: string
+          format: uuid
+          nullable: true
+    PatchedDesignation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        department_name:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        code:
+          type: string
+          maxLength: 50
+        level:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        organization:
+          type: string
+          format: uuid
+        department:
+          type: string
+          format: uuid
+    PatchedEmployee:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        employee_code:
+          type: string
+          maxLength: 50
+        first_name:
+          type: string
+          maxLength: 100
+        last_name:
+          type: string
+          maxLength: 100
+        work_email:
+          type: string
+          format: email
+          maxLength: 255
+        phone_number:
+          type: string
+          nullable: true
+          maxLength: 32
+        gender:
+          type: string
+          nullable: true
+          maxLength: 16
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        joining_date:
+          type: string
+          format: date
+        employment_status:
+          $ref: '#/components/schemas/EmploymentStatusEnum'
+        department:
+          type: string
+          format: uuid
+        department_name:
+          type: string
+          readOnly: true
+        designation:
+          type: string
+          format: uuid
+        designation_title:
+          type: string
+          readOnly: true
+        office:
+          type: string
+          format: uuid
+        office_name:
+          type: string
+          readOnly: true
+        manager:
+          type: string
+          format: uuid
+          nullable: true
+        manager_name:
+          type: string
+          readOnly: true
+        network_username:
+          type: string
+          nullable: true
+          description: RADIUS Accounting User-Name for passive Wi-Fi attendance
+          maxLength: 128
+        avatar_url:
+          nullable: true
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 512
+          - type: string
+            maxLength: 0
+        role:
+          type: string
+          writeOnly: true
+          default: EMPLOYEE
+        password:
+          type: string
+          writeOnly: true
+          default: Welcome123!
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedEmployeeShift:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        shift_name:
+          type: string
+          readOnly: true
+        employee_name:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+          readOnly: true
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+          nullable: true
+        is_active:
+          type: boolean
+        organization:
+          type: string
+          format: uuid
+        employee:
+          type: string
+          format: uuid
+        shift:
+          type: string
+          format: uuid
+    PatchedHoliday:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        office_name:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        holiday_date:
+          type: string
+          format: date
+        is_recurring:
+          type: boolean
+        description:
+          type: string
+          nullable: true
+        organization:
+          type: string
+          format: uuid
+        office:
+          type: string
+          format: uuid
+          nullable: true
+    PatchedLeaveBalance:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        leave_type_name:
+          type: string
+          readOnly: true
+        leave_type_code:
+          type: string
+          readOnly: true
+        is_paid:
+          type: boolean
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+        year:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        allocated_days:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,1})?$
+        used_days:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,1})?$
+        pending_days:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,1})?$
+        remaining_days:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,1})?$
+        organization:
+          type: string
+          format: uuid
+        employee:
+          type: string
+          format: uuid
+        leave_type:
+          type: string
+          format: uuid
+    PatchedLeaveRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        employee_name:
+          type: string
+          readOnly: true
+        employee_code:
+          type: string
+          readOnly: true
+        department_name:
+          type: string
+          readOnly: true
+        leave_type_name:
+          type: string
+          readOnly: true
+        reviewer_email:
+          type: string
+          format: email
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        total_days:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,1})?$
+          readOnly: true
+        reason:
+          type: string
+        attachment_url:
+          nullable: true
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 512
+          - type: string
+            maxLength: 0
+        status:
+          allOf:
+          - $ref: '#/components/schemas/LeaveRequestStatusEnum'
+          readOnly: true
+        review_notes:
+          type: string
+          nullable: true
+        reviewed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        organization:
+          type: string
+          format: uuid
+        employee:
+          type: string
+          format: uuid
+          readOnly: true
+        leave_type:
+          type: string
+          format: uuid
+        reviewed_by:
+          type: string
+          format: uuid
+          readOnly: true
+          nullable: true
+    PatchedLeaveType:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        code:
+          type: string
+          maxLength: 50
+        default_quota_days:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,1})?$
+        is_paid:
+          type: boolean
+        requires_attachment:
+          type: boolean
+        max_carryover_days:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,1})?$
+        organization:
+          type: string
+          format: uuid
+    PatchedNotification:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+        title:
+          type: string
+          maxLength: 255
+        message:
+          type: string
+        notification_type:
+          $ref: '#/components/schemas/NotificationTypeEnum'
+        is_read:
+          type: boolean
+        action_url:
+          type: string
+          nullable: true
+          maxLength: 255
+        organization:
+          type: string
+          format: uuid
+        recipient:
+          type: string
+          format: uuid
+    PatchedOffice:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organization_name:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        address:
+          type: string
+          nullable: true
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+        radius_meters:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        timezone:
+          type: string
+          maxLength: 64
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        organization:
+          type: string
+          format: uuid
+    PatchedOrganization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        slug:
+          type: string
+          maxLength: 100
+          pattern: ^[-a-zA-Z0-9_]+$
+        domain:
+          type: string
+          nullable: true
+          maxLength: 255
+        timezone:
+          type: string
+          maxLength: 64
+        logo_url:
+          nullable: true
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 512
+          - type: string
+            maxLength: 0
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedShift:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        assigned_count:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        code:
+          type: string
+          maxLength: 50
+        shift_type:
+          $ref: '#/components/schemas/ShiftTypeEnum'
+        start_time:
+          type: string
+          format: time
+        end_time:
+          type: string
+          format: time
+        break_duration_minutes:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        grace_period_minutes:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        half_day_threshold_minutes:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        full_day_threshold_minutes:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        is_night_shift:
+          type: boolean
+        organization:
+          type: string
+          format: uuid
+    PatchedWiFiSession:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        employee_name:
+          type: string
+          readOnly: true
+        access_point_name:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+        raw_mac_address:
+          type: string
+          maxLength: 32
+        raw_username:
+          type: string
+          maxLength: 128
+        calling_station_id:
+          type: string
+          nullable: true
+          maxLength: 32
+        nas_ip:
+          type: string
+          nullable: true
+        session_start:
+          type: string
+          format: date-time
+        session_end:
+          type: string
+          format: date-time
+        duration_seconds:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        status:
+          $ref: '#/components/schemas/WiFiSessionStatusEnum'
+        error_message:
+          type: string
+          nullable: true
+        organization:
+          type: string
+          format: uuid
+        access_point:
+          type: string
+          format: uuid
+          nullable: true
+        employee:
+          type: string
+          format: uuid
+          nullable: true
+    RequestedStatusEnum:
+      enum:
+      - PRESENT
+      - LATE
+      - HALF_DAY
+      - ABSENT
+      - ON_LEAVE
+      - HOLIDAY
+      - WEEKEND
+      type: string
+      description: |-
+        * `PRESENT` - Present
+        * `LATE` - Late
+        * `HALF_DAY` - Half Day
+        * `ABSENT` - Absent
+        * `ON_LEAVE` - On Leave
+        * `HOLIDAY` - Holiday
+        * `WEEKEND` - Weekend
+    ReviewStatusEnum:
+      enum:
+      - PENDING
+      - APPROVED
+      - REJECTED
+      type: string
+      description: |-
+        * `PENDING` - Pending Review
+        * `APPROVED` - Approved
+        * `REJECTED` - Rejected
+    RoleEnum:
+      enum:
+      - SUPER_ADMIN
+      - HR_ADMIN
+      - MANAGER
+      - EMPLOYEE
+      type: string
+      description: |-
+        * `SUPER_ADMIN` - Super Administrator
+        * `HR_ADMIN` - HR Administrator
+        * `MANAGER` - People Manager
+        * `EMPLOYEE` - Employee
+    Shift:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        assigned_count:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        code:
+          type: string
+          maxLength: 50
+        shift_type:
+          $ref: '#/components/schemas/ShiftTypeEnum'
+        start_time:
+          type: string
+          format: time
+        end_time:
+          type: string
+          format: time
+        break_duration_minutes:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        grace_period_minutes:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        half_day_threshold_minutes:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        full_day_threshold_minutes:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        is_night_shift:
+          type: boolean
+        organization:
+          type: string
+          format: uuid
+      required:
+      - assigned_count
+      - code
+      - created_at
+      - id
+      - is_deleted
+      - name
+      - organization
+      - updated_at
+    ShiftTypeEnum:
+      enum:
+      - FIXED
+      - FLEXIBLE
+      - ROTATING
+      type: string
+      description: |-
+        * `FIXED` - Fixed Hours
+        * `FLEXIBLE` - Flexible Hours
+        * `ROTATING` - Rotating Shift
+    Status6a3Enum:
+      enum:
+      - PRESENT
+      - LATE
+      - HALF_DAY
+      - ABSENT
+      - ON_LEAVE
+      - HOLIDAY
+      - WEEKEND
+      type: string
+      description: |-
+        * `PRESENT` - Present
+        * `LATE` - Late
+        * `HALF_DAY` - Half Day
+        * `ABSENT` - Absent
+        * `ON_LEAVE` - On Leave
+        * `HOLIDAY` - Holiday
+        * `WEEKEND` - Weekend
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        organization:
+          type: string
+          format: uuid
+          nullable: true
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - email
+      - id
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        is_active:
+          type: boolean
+        organization:
+          type: string
+          readOnly: true
+        employee:
+          type: string
+          readOnly: true
+      required:
+      - email
+      - employee
+      - id
+      - organization
+    WiFiSession:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        employee_name:
+          type: string
+          readOnly: true
+        access_point_name:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_deleted:
+          type: boolean
+        raw_mac_address:
+          type: string
+          maxLength: 32
+        raw_username:
+          type: string
+          maxLength: 128
+        calling_station_id:
+          type: string
+          nullable: true
+          maxLength: 32
+        nas_ip:
+          type: string
+          nullable: true
+        session_start:
+          type: string
+          format: date-time
+        session_end:
+          type: string
+          format: date-time
+        duration_seconds:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        status:
+          $ref: '#/components/schemas/WiFiSessionStatusEnum'
+        error_message:
+          type: string
+          nullable: true
+        organization:
+          type: string
+          format: uuid
+        access_point:
+          type: string
+          format: uuid
+          nullable: true
+        employee:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - access_point_name
+      - created_at
+      - employee_name
+      - id
+      - organization
+      - raw_mac_address
+      - raw_username
+      - session_end
+      - session_start
+      - updated_at
+    WiFiSessionStatusEnum:
+      enum:
+      - PENDING
+      - PROCESSED
+      - IGNORED
+      - ERROR
+      type: string
+      description: |-
+        * `PENDING` - Pending Processing
+        * `PROCESSED` - Processed into Attendance
+        * `IGNORED` - Ignored (Unknown AP or User)
+        * `ERROR` - Error during processing
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
