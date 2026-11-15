@@ -64,7 +64,11 @@
 
     <!-- Navigation View Switcher -->
     <nav class="flex items-center bg-slate-900/90 border border-slate-800 p-1 rounded-lg text-xs font-medium space-x-1">
-      <button onclick="switchView('dashboard')" id="btn-dashboard" class="tab-btn tab-active px-3 py-1.5 rounded-md transition-all flex items-center space-x-1.5 text-slate-300 hover:text-white">
+      <button onclick="switchView('all')" id="btn-all" class="tab-btn tab-active px-3 py-1.5 rounded-md transition-all flex items-center space-x-1.5 text-slate-300 hover:text-white">
+        <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+        <span>All Frames (Canvas)</span>
+      </button>
+      <button onclick="switchView('dashboard')" id="btn-dashboard" class="tab-btn px-3 py-1.5 rounded-md transition-all flex items-center space-x-1.5 text-slate-400 hover:text-white">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
         <span>HR Dashboard</span>
       </button>
@@ -106,8 +110,22 @@
   <!-- ================= MAIN CONTAINER ================= -->
   <main class="w-full">
 
+    <!-- FRAME 01 HEADER -->
+    <div id="frame-tag-dashboard" class="frame-tag px-6 pt-6 pb-2 max-w-[1600px] mx-auto flex items-center justify-between text-xs font-mono text-slate-400">
+      <div class="flex items-center space-x-2.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse"></span>
+        <span class="text-indigo-400 font-bold">❖ Frame 01</span>
+        <span class="text-white font-medium">HR Admin — Executive Dashboard</span>
+        <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] text-slate-300">1440 × 900</span>
+      </div>
+      <button onclick="switchView('dashboard')" class="text-[11px] text-indigo-400 hover:text-indigo-300 flex items-center space-x-1 font-sans">
+        <span>Focus Frame</span>
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      </button>
+    </div>
+
     <!-- VIEW 1: HR DASHBOARD WITH WEB SHELL -->
-    <section id="view-dashboard" class="preview-section block">
+    <section id="view-dashboard" class="preview-section block border-b border-slate-800/80 pb-12 mb-8">
       <div class="flex min-h-[calc(100vh-57px)]">
         
         <!-- SIDEBAR -->
@@ -763,8 +781,22 @@
       </div>
     </section>
 
+    <!-- FRAME 02 HEADER -->
+    <div id="frame-tag-employees" class="frame-tag px-6 pt-10 pb-2 max-w-[1600px] mx-auto flex items-center justify-between text-xs font-mono text-slate-400">
+      <div class="flex items-center space-x-2.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+        <span class="text-blue-400 font-bold">❖ Frame 02</span>
+        <span class="text-white font-medium">HR Admin — Employee Directory & Profile Drawer</span>
+        <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] text-slate-300">1440 × 900</span>
+      </div>
+      <button onclick="switchView('employees')" class="text-[11px] text-indigo-400 hover:text-indigo-300 flex items-center space-x-1 font-sans">
+        <span>Focus Frame</span>
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      </button>
+    </div>
+
     <!-- VIEW 2: EMPLOYEE DIRECTORY & PROFILE DRAWER -->
-    <section id="view-employees" class="preview-section hidden p-6 max-w-[1600px] mx-auto space-y-6">
+    <section id="view-employees" class="preview-section hidden p-6 max-w-[1600px] mx-auto space-y-6 border-b border-slate-800/80 pb-12 mb-8">
       
       <!-- Header -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
@@ -914,8 +946,22 @@
       </div>
     </section>
 
+    <!-- FRAME 03 HEADER -->
+    <div id="frame-tag-attendance" class="frame-tag px-6 pt-10 pb-2 max-w-[1600px] mx-auto flex items-center justify-between text-xs font-mono text-slate-400">
+      <div class="flex items-center space-x-2.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+        <span class="text-emerald-400 font-bold">❖ Frame 03</span>
+        <span class="text-white font-medium">HR Admin — Real-Time Attendance & Hardware Gateways</span>
+        <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] text-slate-300">1440 × 900</span>
+      </div>
+      <button onclick="switchView('attendance')" class="text-[11px] text-indigo-400 hover:text-indigo-300 flex items-center space-x-1 font-sans">
+        <span>Focus Frame</span>
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      </button>
+    </div>
+
     <!-- VIEW 3: ATTENDANCE & WI-FI GATEWAY VERIFICATION -->
-    <section id="view-attendance" class="preview-section hidden p-6 max-w-[1600px] mx-auto space-y-6">
+    <section id="view-attendance" class="preview-section hidden p-6 max-w-[1600px] mx-auto space-y-6 border-b border-slate-800/80 pb-12 mb-8">
       
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
         <div>
@@ -1019,8 +1065,22 @@
       </div>
     </section>
 
+    <!-- FRAME 04 HEADER -->
+    <div id="frame-tag-leave" class="frame-tag px-6 pt-10 pb-2 max-w-[1600px] mx-auto flex items-center justify-between text-xs font-mono text-slate-400">
+      <div class="flex items-center space-x-2.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+        <span class="text-amber-400 font-bold">❖ Frame 04</span>
+        <span class="text-white font-medium">HR Admin — Leave Governance & Collision Approvals</span>
+        <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] text-slate-300">1440 × 900</span>
+      </div>
+      <button onclick="switchView('leave')" class="text-[11px] text-indigo-400 hover:text-indigo-300 flex items-center space-x-1 font-sans">
+        <span>Focus Frame</span>
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      </button>
+    </div>
+
     <!-- VIEW 4: LEAVE MANAGEMENT & APPROVAL WORKFLOW -->
-    <section id="view-leave" class="preview-section hidden p-6 max-w-[1600px] mx-auto space-y-6">
+    <section id="view-leave" class="preview-section hidden p-6 max-w-[1600px] mx-auto space-y-6 border-b border-slate-800/80 pb-12 mb-8">
       
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
         <div>
@@ -1117,8 +1177,22 @@
 
     </section>
 
+    <!-- FRAME 05 HEADER -->
+    <div id="frame-tag-mobile" class="frame-tag px-6 pt-10 pb-2 max-w-[1600px] mx-auto flex items-center justify-between text-xs font-mono text-slate-400">
+      <div class="flex items-center space-x-2.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-cyan-500"></span>
+        <span class="text-cyan-400 font-bold">❖ Frame 05</span>
+        <span class="text-white font-medium">Mobile App — Employee Mobile Experience (3 Screens: Home, Attendance, Leave)</span>
+        <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] text-slate-300">390 × 844 × 3</span>
+      </div>
+      <button onclick="switchView('mobile')" class="text-[11px] text-indigo-400 hover:text-indigo-300 flex items-center space-x-1 font-sans">
+        <span>Focus Frame</span>
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      </button>
+    </div>
+
     <!-- VIEW 5: MOBILE APPLICATION EXPERIENCE -->
-    <section id="view-mobile" class="preview-section hidden p-6 max-w-[1600px] mx-auto space-y-6">
+    <section id="view-mobile" class="preview-section hidden p-6 max-w-[1600px] mx-auto space-y-6 border-b border-slate-800/80 pb-12 mb-8">
       
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
         <div>
@@ -1402,8 +1476,22 @@
 
     </section>
 
+    <!-- FRAME 06 HEADER -->
+    <div id="frame-tag-tokens" class="frame-tag px-6 pt-10 pb-2 max-w-[1600px] mx-auto flex items-center justify-between text-xs font-mono text-slate-400">
+      <div class="flex items-center space-x-2.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
+        <span class="text-purple-400 font-bold">❖ Frame 06</span>
+        <span class="text-white font-medium">Design System Foundations — Tokens, Typography & Badges</span>
+        <span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] text-slate-300">1440 × 900</span>
+      </div>
+      <button onclick="switchView('tokens')" class="text-[11px] text-indigo-400 hover:text-indigo-300 flex items-center space-x-1 font-sans">
+        <span>Focus Frame</span>
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      </button>
+    </div>
+
     <!-- VIEW 6: DESIGN SYSTEM TOKENS & FOUNDATIONS -->
-    <section id="view-tokens" class="preview-section hidden p-6 max-w-[1600px] mx-auto space-y-8">
+    <section id="view-tokens" class="preview-section hidden p-6 max-w-[1600px] mx-auto space-y-8 pb-12">
       
       <div class="pb-4 border-b border-slate-800">
         <h2 class="text-xl font-bold tracking-tight text-white">Design Tokens & Component Taxonomy</h2>
@@ -1717,23 +1805,40 @@
     // Tab switching
     function switchView(viewName) {
       const sections = document.querySelectorAll('.preview-section');
-      sections.forEach(s => s.classList.add('hidden'));
-      sections.forEach(s => s.classList.remove('block'));
-
-      const activeSection = document.getElementById('view-' + viewName);
-      if (activeSection) {
-        activeSection.classList.remove('hidden');
-        activeSection.classList.add('block');
-      }
-
-      // Button tabs
+      const frameTags = document.querySelectorAll('.frame-tag');
       const btns = document.querySelectorAll('.tab-btn');
       btns.forEach(b => b.classList.remove('tab-active'));
-      const activeBtn = document.getElementById('btn-' + viewName);
-      if (activeBtn) {
-        activeBtn.classList.add('tab-active');
+
+      if (viewName === 'all') {
+        sections.forEach(s => {
+          s.classList.remove('hidden');
+          s.classList.add('block');
+        });
+        frameTags.forEach(ft => ft.style.display = 'flex');
+        const activeBtn = document.getElementById('btn-all');
+        if (activeBtn) activeBtn.classList.add('tab-active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        sections.forEach(s => {
+          s.classList.add('hidden');
+          s.classList.remove('block');
+        });
+        frameTags.forEach(ft => ft.style.display = 'none');
+        const activeSection = document.getElementById('view-' + viewName);
+        if (activeSection) {
+          activeSection.classList.remove('hidden');
+          activeSection.classList.add('block');
+        }
+        const activeBtn = document.getElementById('btn-' + viewName);
+        if (activeBtn) activeBtn.classList.add('tab-active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
+
+    // Default to All Frames canvas view on load
+    window.addEventListener('DOMContentLoaded', () => {
+      switchView('all');
+    });
 
     // Profile Drawer
     function openProfileDrawer(name) {
