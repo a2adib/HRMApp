@@ -189,7 +189,19 @@ CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'redis://localho
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+from celery.schedules import crontab
+
 CELERY_TIMEZONE = 'UTC'
+CELERY_BEAT_SCHEDULE = {
+    'process-pending-wifi-sessions-every-5min': {
+        'task': 'wifi_attendance.process_pending_sessions',
+        'schedule': 300.0,
+    },
+    'nightly-attendance-reconciliation': {
+        'task': 'wifi_attendance.nightly_reconciliation',
+        'schedule': crontab(hour=0, minute=5),
+    },
+}
 
 # Wi-Fi Ingestion Service Secret
 WIFI_INGESTION_SERVICE_TOKEN = os.environ.get(
