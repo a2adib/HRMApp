@@ -2,6 +2,42 @@ import React from 'react'
 import { Badge } from './badge'
 import { CheckCircle2, Clock, AlertCircle, Calendar, ShieldCheck, Wifi, XCircle } from 'lucide-react'
 
+export function StatusBadge({ status, className }) {
+  const s = (status || '').toLowerCase()
+
+  if (s === 'active') {
+    return (
+      <Badge variant="success" className={className}>
+        <CheckCircle2 className="w-3 h-3 text-emerald-500" />
+        <span>Active</span>
+      </Badge>
+    )
+  }
+
+  if (s === 'inactive') {
+    return (
+      <Badge variant="neutral" className={className}>
+        <AlertCircle className="w-3 h-3 text-slate-400" />
+        <span>Inactive</span>
+      </Badge>
+    )
+  }
+
+  if (['present', 'late', 'absent', 'half_day', 'half day', 'on_leave', 'leave', 'on leave'].includes(s)) {
+    return <AttendanceStatusBadge status={status} className={className} />
+  }
+
+  if (['approved', 'pending', 'rejected', 'cancelled'].includes(s)) {
+    return <LeaveStatusBadge status={status} className={className} />
+  }
+
+  return (
+    <Badge variant="neutral" className={className}>
+      <span>{status || 'Unknown'}</span>
+    </Badge>
+  )
+}
+
 export function AttendanceStatusBadge({ status, lateMinutes, className }) {
   const s = (status || '').toLowerCase()
 
@@ -84,6 +120,15 @@ export function LeaveStatusBadge({ status, className }) {
       <Badge variant="danger" className={className}>
         <XCircle className="w-3 h-3 text-rose-500" />
         <span>Rejected</span>
+      </Badge>
+    )
+  }
+
+  if (s === 'cancelled') {
+    return (
+      <Badge variant="neutral" className={className}>
+        <XCircle className="w-3 h-3 text-slate-400" />
+        <span>Cancelled</span>
       </Badge>
     )
   }
