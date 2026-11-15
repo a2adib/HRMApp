@@ -1,9 +1,94 @@
 import datetime
+import math
 from django.utils import timezone
 from django.db import transaction, models
 from .models import AttendanceRecord, AttendanceEvent
 from apps.shifts.models import Shift, EmployeeShift
 from apps.holidays.models import Holiday
+
+
+def calculate_haversine_distance(lat1, lon1, lat2, lon2):
+    """
+    Calculate the great circle distance between two points 
+    on the earth (specified in decimal degrees).
+    Returns distance in meters.
+    """
+    if lat1 is None or lon1 is None or lat2 is None or lon2 is None:
+        return None
+    try:
+        lat1, lon1, lat2, lon2 = map(math.radians, [float(lat1), float(lon1), float(lat2), float(lon2)])
+        dlat = lat2 - lat1
+        dlon = lon2 - lon1
+        a = math.sin(dlat / 2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2)**2
+        c = 2 * math.asin(math.sqrt(a))
+        r = 6371000  # Earth radius in meters
+        return c * r
+    except (ValueError, TypeError):
+        return None
+
+
+def verify_office_geofence(employee, latitude, longitude):
+    """
+    Verifies whether the provided GPS coordinates fall within the employee's assigned office geofence.
+    """
+    if latitude is None or longitude is None:
+        return {
+            "verified": False,
+            "distance_meters": None,
+            "allowed_radius_meters": None,
+            "office_name": None,
+            "office_id": None,
+            "reason": "Missing coordinates"
+        }
+
+    office = getattr(employee, 'office', None)
+    if not office or office.latitude is None or office.longitude is None:
+        # Check any office configured for the organization
+        org_offices = employee.organization.offices.filter(
+            latitude__isnull=False,
+            longitude__isnull=False,
+            is_active=True
+        )
+        if not org_offices.exists():
+            return {
+                "verified": False,
+                "distance_meters": None,
+                "allowed_radius_meters": None,
+                "office_name": None,
+                "office_id": None,
+                "reason": "No office coordinates configured"
+            }
+        best_office = None
+        min_dist = float('inf')
+        for off in org_offices:
+            dist = calculate_haversine_distance(latitude, longitude, off.latitude, off.longitude)
+            if dist is not None and dist < min_dist:
+                min_dist = dist
+                best_office = off
+        office = best_office
+
+    dist = calculate_haversine_distance(latitude, longitude, office.latitude, office.longitude)
+    if dist is None:
+        return {
+            "verified": False,
+            "distance_meters": None,
+            "allowed_radius_meters": None,
+            "office_name": office.name,
+            "office_id": str(office.id),
+            "reason": "Distance calculation failed"
+        }
+
+    radius = getattr(office, 'geofence_radius_meters', None) or getattr(office, 'radius_meters', 250)
+    is_inside = (dist <= radius)
+
+    return {
+        "verified": is_inside,
+        "distance_meters": round(dist, 2),
+        "allowed_radius_meters": radius,
+        "office_name": office.name,
+        "office_id": str(office.id),
+        "reason": "Inside geofence" if is_inside else f"Distance {round(dist, 1)}m exceeds allowed radius {radius}m"
+    }
 
 
 def get_employee_shift_for_date(employee, date):
@@ -28,16 +113,26 @@ def record_punch(employee, event_type, timestamp=None, source='MANUAL', latitude
     """
     Records a punch (check-in / check-out), creates AttendanceEvent,
     and updates/recalculates the parent AttendanceRecord.
+    If GPS coordinates are provided, verifies office geofence.
     """
     if timestamp is None:
         timestamp = timezone.now()
 
     punch_date = timestamp.date()
     organization = employee.organization
+    meta = dict(metadata or {})
+
+    # Evaluate Geofence if coordinates are provided
+    geofence_info = None
+    if latitude is not None and longitude is not None:
+        geofence_info = verify_office_geofence(employee, latitude, longitude)
+        meta['geofence'] = geofence_info
+        if geofence_info.get('verified') is True:
+            source = 'MOBILE_GEOFENCE'
 
     # Find or create daily attendance record
     shift = get_employee_shift_for_date(employee, punch_date)
-    record, _ = AttendanceRecord.objects.get_or_create(
+    record, created = AttendanceRecord.objects.get_or_create(
         organization=organization,
         employee=employee,
         attendance_date=punch_date,
@@ -47,6 +142,9 @@ def record_punch(employee, event_type, timestamp=None, source='MANUAL', latitude
             'source': source,
         }
     )
+
+    if not created and source == 'MOBILE_GEOFENCE' and record.source in ['MANUAL', 'MOBILE_APP']:
+        record.source = 'MOBILE_GEOFENCE'
 
     # Log event
     event = AttendanceEvent.objects.create(
@@ -59,7 +157,7 @@ def record_punch(employee, event_type, timestamp=None, source='MANUAL', latitude
         latitude=latitude,
         longitude=longitude,
         access_point=access_point,
-        metadata=metadata or {}
+        metadata=meta
     )
 
     # Recalculate record unless locked by admin

@@ -15,6 +15,7 @@ class AttendanceRecord(TenantBaseModel):
     SOURCE_CHOICES = (
         ('WIFI', 'Wi-Fi Tracking'),
         ('MANUAL', 'Manual Punch'),
+        ('MOBILE_GEOFENCE', 'Mobile Geofence'),
         ('ADMIN_CORRECTION', 'Admin Correction'),
     )
 
@@ -65,6 +66,7 @@ class AttendanceEvent(TenantBaseModel):
     SOURCE_CHOICES = (
         ('WIFI', 'Wi-Fi Ingest'),
         ('MOBILE_APP', 'Mobile App'),
+        ('MOBILE_GEOFENCE', 'Mobile Geofence'),
         ('WEB_PORTAL', 'Web Portal'),
         ('ADMIN', 'Admin Intervention'),
     )

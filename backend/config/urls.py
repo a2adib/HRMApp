@@ -3,6 +3,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
+from apps.core.views import HealthzView, ReadyzView
 from apps.accounts.views import (
     CustomLoginView,
     CustomTokenRefreshView,
@@ -34,7 +35,12 @@ from apps.reports.views import (
     AttendanceReportView,
     LeaveReportView
 )
-from apps.payroll.views import PayrollSummaryView
+from apps.payroll.views import (
+    PayrollSummaryView,
+    SalaryStructureViewSet,
+    PayrollPeriodViewSet,
+    PayslipViewSet
+)
 from apps.audit.views import AuditLogViewSet
 
 # API v1 Router
@@ -56,9 +62,18 @@ router.register(r'leaves', LeaveRequestViewSet, basename='leave-request')
 router.register(r'notifications', NotificationViewSet, basename='notification')
 router.register(r'announcements', AnnouncementViewSet, basename='announcement')
 router.register(r'audit-logs', AuditLogViewSet, basename='audit-log')
+router.register(r'payroll/salary-structures', SalaryStructureViewSet, basename='salary-structure')
+router.register(r'payroll/periods', PayrollPeriodViewSet, basename='payroll-period')
+router.register(r'payroll/payslips', PayslipViewSet, basename='payslip')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # Health & Readiness Probes
+    path('healthz/', HealthzView.as_view(), name='healthz'),
+    path('readyz/', ReadyzView.as_view(), name='readyz'),
+    path('api/v1/healthz/', HealthzView.as_view(), name='api_healthz'),
+    path('api/v1/readyz/', ReadyzView.as_view(), name='api_readyz'),
 
     # OpenAPI Schema & Swagger Documentation
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),

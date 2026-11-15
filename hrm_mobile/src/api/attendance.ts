@@ -30,18 +30,43 @@ export interface AttendanceAdjustmentPayload {
   reason: string;
 }
 
+export interface GeofenceInfo {
+  verified: boolean;
+  distance_meters: number | null;
+  allowed_radius_meters: number | null;
+  office_name: string | null;
+  office_id: string | null;
+  reason?: string;
+}
+
+export interface PunchPayload {
+  notes?: string;
+  latitude?: number;
+  longitude?: number;
+  enforce_geofence?: boolean;
+  device_info?: string;
+}
+
+export interface PunchResponse {
+  detail: string;
+  record?: any;
+  geofence?: GeofenceInfo | null;
+}
+
 export const getTodayAttendanceApi = async (): Promise<TodayAttendance> => {
   const response = await apiClient.get('/attendance/today/');
   return response.data;
 };
 
-export const checkInApi = async (notes?: string): Promise<{ success: boolean; message: string }> => {
-  const response = await apiClient.post('/attendance/check-in/', { notes });
+export const checkInApi = async (payload?: PunchPayload | string): Promise<PunchResponse> => {
+  const body = typeof payload === 'string' ? { notes: payload } : (payload || {});
+  const response = await apiClient.post('/attendance/check-in/', body);
   return response.data;
 };
 
-export const checkOutApi = async (notes?: string): Promise<{ success: boolean; message: string }> => {
-  const response = await apiClient.post('/attendance/check-out/', { notes });
+export const checkOutApi = async (payload?: PunchPayload | string): Promise<PunchResponse> => {
+  const body = typeof payload === 'string' ? { notes: payload } : (payload || {});
+  const response = await apiClient.post('/attendance/check-out/', body);
   return response.data;
 };
 

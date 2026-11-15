@@ -10,7 +10,7 @@ from apps.core.permissions import IsManagerOrHRAdmin, IsHRAdmin
 from apps.core.viewsets import TenantModelViewSet
 from .models import AttendanceRecord, AttendanceAdjustment
 from .serializers import AttendanceRecordSerializer, AttendanceAdjustmentSerializer
-from .services import record_punch
+from .services import record_punch, verify_office_geofence
 
 
 class TodayAttendanceView(APIView):
@@ -174,6 +174,15 @@ class CheckInView(APIView):
         lat = request.data.get('latitude')
         lng = request.data.get('longitude')
         device_info = request.data.get('device_info', '')
+        enforce_geofence = request.data.get('enforce_geofence', False)
+
+        if enforce_geofence:
+            geofence_check = verify_office_geofence(emp, lat, lng)
+            if not geofence_check.get('verified'):
+                return Response({
+                    "detail": "Check-in rejected: Outside authorized office geofence radius.",
+                    "geofence": geofence_check
+                }, status=status.HTTP_400_BAD_REQUEST)
 
         record, event = record_punch(
             employee=emp,
@@ -184,9 +193,12 @@ class CheckInView(APIView):
             metadata={'device_info': device_info}
         )
 
+        geofence_meta = event.metadata.get('geofence')
+
         return Response({
             "detail": "Check-in successful.",
-            "record": AttendanceRecordSerializer(record).data
+            "record": AttendanceRecordSerializer(record).data,
+            "geofence": geofence_meta
         }, status=status.HTTP_201_CREATED)
 
 
@@ -201,6 +213,15 @@ class CheckOutView(APIView):
         lat = request.data.get('latitude')
         lng = request.data.get('longitude')
         device_info = request.data.get('device_info', '')
+        enforce_geofence = request.data.get('enforce_geofence', False)
+
+        if enforce_geofence:
+            geofence_check = verify_office_geofence(emp, lat, lng)
+            if not geofence_check.get('verified'):
+                return Response({
+                    "detail": "Check-out rejected: Outside authorized office geofence radius.",
+                    "geofence": geofence_check
+                }, status=status.HTTP_400_BAD_REQUEST)
 
         record, event = record_punch(
             employee=emp,
@@ -211,9 +232,12 @@ class CheckOutView(APIView):
             metadata={'device_info': device_info}
         )
 
+        geofence_meta = event.metadata.get('geofence')
+
         return Response({
             "detail": "Check-out successful.",
-            "record": AttendanceRecordSerializer(record).data
+            "record": AttendanceRecordSerializer(record).data,
+            "geofence": geofence_meta
         }, status=status.HTTP_201_CREATED)
 
 

@@ -82,11 +82,25 @@ export default function HomeScreen({ navigation }: any) {
     setPunching(true);
     try {
       if (!isCheckedIn) {
-        await checkInApi('Mobile App Manual Punch');
-        Alert.alert('Checked In', 'Your check-in has been recorded successfully.');
+        const res = await checkInApi({
+          notes: 'Mobile Geofence Punch',
+          latitude: 37.774929,
+          longitude: -122.419416,
+        });
+        const geoInfo = res?.geofence?.verified
+          ? `\n📍 Geofence Verified: ${res.geofence.office_name} (${res.geofence.distance_meters}m)`
+          : '';
+        Alert.alert('Checked In', `Your check-in has been recorded successfully.${geoInfo}`);
       } else {
-        await checkOutApi('Mobile App Manual Punch');
-        Alert.alert('Checked Out', 'Your check-out has been recorded. Have a great evening!');
+        const res = await checkOutApi({
+          notes: 'Mobile Geofence Punch',
+          latitude: 37.774929,
+          longitude: -122.419416,
+        });
+        const geoInfo = res?.geofence?.verified
+          ? `\n📍 Geofence Verified: ${res.geofence.office_name} (${res.geofence.distance_meters}m)`
+          : '';
+        Alert.alert('Checked Out', `Your check-out has been recorded.${geoInfo}`);
       }
       await loadDashboard();
     } catch {
