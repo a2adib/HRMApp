@@ -42,7 +42,7 @@ export default function LoginScreen() {
 
   const fillDemo = (roleEmail: string) => {
     setEmail(roleEmail);
-    setPassword('Password123!');
+    setPassword('Pass@1234!');
   };
 
   return (
@@ -58,9 +58,9 @@ export default function LoginScreen() {
           {/* Brand Header */}
           <View style={styles.header}>
             <View style={styles.logoBadge}>
-              <Text style={styles.logoText}>HR</Text>
+              <Text style={styles.logoText}>GV</Text>
             </View>
-            <Text style={styles.title}>Acme Global</Text>
+            <Text style={styles.title}>Govaly HR</Text>
             <Text style={styles.subtitle}>Enterprise Employee Mobile Portal</Text>
           </View>
 
@@ -72,7 +72,7 @@ export default function LoginScreen() {
               <Text style={styles.label}>Corporate Email</Text>
               <TextInput
                 style={styles.input}
-                placeholder="name@acme-corp.com"
+                placeholder="name@govaly.com"
                 placeholderTextColor={Colors.textMuted}
                 autoCapitalize="none"
                 keyboardType="email-address"
@@ -110,19 +110,33 @@ export default function LoginScreen() {
 
             {/* Demo Quick-Fill Chips */}
             <View style={styles.demoSection}>
-              <Text style={styles.demoTitle}>Quick-fill demo account:</Text>
+              <Text style={styles.demoTitle}>Quick-fill team account (Pass@1234!):</Text>
               <View style={styles.demoChipsRow}>
                 <TouchableOpacity
-                  onPress={() => fillDemo('alex.rivera@acme-corp.com')}
+                  onPress={() => fillDemo('adib@govaly.com')}
                   style={styles.chip}
                 >
-                  <Text style={styles.chipText}>Alex Rivera (Employee)</Text>
+                  <Text style={styles.chipText}>Adib (CEO)</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => fillDemo('marcus.brody@acme-corp.com')}
+                  onPress={() => fillDemo('tech@govaly.com')}
                   style={styles.chip}
                 >
-                  <Text style={styles.chipText}>Marcus Brody (Manager)</Text>
+                  <Text style={styles.chipText}>Tech (HR)</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={[styles.demoChipsRow, { marginTop: 6 }]}>
+                <TouchableOpacity
+                  onPress={() => fillDemo('fahim@govaly.com')}
+                  style={styles.chip}
+                >
+                  <Text style={styles.chipText}>Fahim (Lead)</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => fillDemo('abrar@govaly.com')}
+                  style={styles.chip}
+                >
+                  <Text style={styles.chipText}>Abrar (Member)</Text>
                 </TouchableOpacity>
               </View>
             </View>

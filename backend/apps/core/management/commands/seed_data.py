@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.db import transaction
@@ -13,463 +14,369 @@ from apps.leaves.models import LeaveType, LeaveBalance, LeaveRequest
 from apps.attendance.models import AttendanceRecord, AttendanceEvent
 from apps.wifi_attendance.models import WiFiSession
 from apps.notifications.models import Notification, Announcement
+from apps.payroll.models import SalaryStructure, PayrollPeriod, Payslip
 
 
 class Command(BaseCommand):
-    help = 'Seeds realistic enterprise demo data for HRM platform'
+    help = 'Cleans all fake/legacy data and seeds Govaly enterprise workspace'
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--clean',
+            action='store_true',
+            default=True,
+            help='Delete all existing data before seeding Govaly'
+        )
 
     @transaction.atomic
     def handle(self, *args, **options):
-        self.stdout.write(self.style.NOTICE('Starting enterprise HRM data seeding...'))
+        self.stdout.write(self.style.NOTICE('Cleaning legacy/fake data and initializing Govaly workspace...'))
 
-        # 1. Organizations
-        acme, _ = Organization.objects.get_or_create(
-            slug='acme-global',
-            defaults={
-                'name': 'Acme Global Technologies',
-                'domain': 'acme-corp.com',
-                'timezone': 'America/New_York',
-                'logo_url': 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=128&auto=format&fit=crop&q=80',
-            }
+        # 1. Complete wipe of old demo data
+        if options.get('clean', True):
+            from django.db import connection
+            with connection.cursor() as cursor:
+                cursor.execute("TRUNCATE TABLE organizations CASCADE;")
+            self.stdout.write(self.style.SUCCESS('Purged all legacy records.'))
+
+        # 2. Organization: Govaly
+        govaly = Organization.objects.create(
+            name='Govaly',
+            slug='govaly',
+            domain='govaly.com',
+            timezone='Asia/Dhaka',
+            is_active=True
         )
 
-        beta, _ = Organization.objects.get_or_create(
-            slug='beta-innovations',
-            defaults={
-                'name': 'Beta Innovations Ltd',
-                'domain': 'beta-innovations.com',
-                'timezone': 'Europe/London',
-            }
+        # 3. Office: Govaly HQ
+        office = Office.objects.create(
+            organization=govaly,
+            name='Govaly Headquarters',
+            address='House 42, Road 11, Banani, Dhaka, Bangladesh',
+            latitude=Decimal('23.793700'),
+            longitude=Decimal('90.406600'),
+            radius_meters=300,
+            geofence_radius_meters=300,
+            timezone='Asia/Dhaka',
+            is_active=True
         )
 
-        # 2. Offices
-        hq_office, _ = Office.objects.get_or_create(
-            organization=acme,
-            name='Austin HQ Campus',
-            defaults={
-                'address': '500 W 2nd St, Austin, TX 78701',
-                'latitude': 30.267153,
-                'longitude': -97.743057,
-                'radius_meters': 200,
-                'timezone': 'America/Chicago',
-            }
-        )
-
-        ny_office, _ = Office.objects.get_or_create(
-            organization=acme,
-            name='New York Branch',
-            defaults={
-                'address': '350 5th Ave, New York, NY 10118',
-                'latitude': 40.748817,
-                'longitude': -73.985428,
-                'radius_meters': 150,
-                'timezone': 'America/New_York',
-            }
-        )
-
-        # 3. Access Points
-        ap1, _ = AccessPoint.objects.get_or_create(
-            organization=acme,
-            office=hq_office,
+        # 4. Access Points for Wi-Fi Tracking
+        ap_tech = AccessPoint.objects.create(
+            organization=govaly,
+            office=office,
+            name='AP-GOVALY-TECH-01',
             mac_address='00:1A:1E:17:F1:80',
-            defaults={
-                'name': 'HQ-Floor3-West-AP01',
-                'ip_address': '10.0.1.10',
-                'location_description': 'Floor 3 Engineering Wing',
-            }
+            ip_address='10.10.1.10',
+            location_description='Technology & Engineering Wing',
+            is_active=True
         )
-
-        ap2, _ = AccessPoint.objects.get_or_create(
-            organization=acme,
-            office=hq_office,
+        ap_exec = AccessPoint.objects.create(
+            organization=govaly,
+            office=office,
+            name='AP-GOVALY-EXEC-02',
             mac_address='00:1A:1E:17:F1:81',
-            defaults={
-                'name': 'HQ-Floor3-East-AP02',
-                'ip_address': '10.0.1.11',
-                'location_description': 'Floor 3 Design & Product Wing',
-            }
+            ip_address='10.10.1.11',
+            location_description='Executive & People Operations Wing',
+            is_active=True
         )
 
-        # 4. Departments
-        eng_dept, _ = Department.objects.get_or_create(
-            organization=acme,
-            code='ENG',
-            defaults={'name': 'Engineering'}
+        # 5. Departments
+        dept_exec = Department.objects.create(
+            organization=govaly,
+            name='Executive Leadership',
+            code='EXEC'
         )
-        prd_dept, _ = Department.objects.get_or_create(
-            organization=acme,
-            code='PRD',
-            defaults={'name': 'Product & Design'}
+        dept_hr = Department.objects.create(
+            organization=govaly,
+            name='Human Resources',
+            code='HR'
         )
-        hr_dept, _ = Department.objects.get_or_create(
-            organization=acme,
-            code='HR',
-            defaults={'name': 'People & Human Resources'}
-        )
-
-        # 5. Designations
-        des_vp_eng, _ = Designation.objects.get_or_create(
-            organization=acme,
-            department=eng_dept,
-            code='VP-ENG',
-            defaults={'title': 'VP of Engineering', 'level': 5}
-        )
-        des_sr_eng, _ = Designation.objects.get_or_create(
-            organization=acme,
-            department=eng_dept,
-            code='SR-SDE',
-            defaults={'title': 'Senior Backend Engineer', 'level': 3}
-        )
-        des_fe_eng, _ = Designation.objects.get_or_create(
-            organization=acme,
-            department=eng_dept,
-            code='FE-SDE',
-            defaults={'title': 'Frontend Engineer', 'level': 2}
-        )
-        des_lead_des, _ = Designation.objects.get_or_create(
-            organization=acme,
-            department=prd_dept,
-            code='LEAD-DES',
-            defaults={'title': 'Lead Product Designer', 'level': 4}
-        )
-        des_hr_dir, _ = Designation.objects.get_or_create(
-            organization=acme,
-            department=hr_dept,
-            code='HR-DIR',
-            defaults={'title': 'HR Director', 'level': 5}
+        dept_tech = Department.objects.create(
+            organization=govaly,
+            name='Technology & Engineering',
+            code='TECH'
         )
 
-        # 6. Shifts
-        standard_shift, _ = Shift.objects.get_or_create(
-            organization=acme,
-            code='STD-DAY',
-            defaults={
-                'name': 'Standard Day Shift',
-                'shift_type': 'FIXED',
-                'start_time': datetime.time(9, 0),
-                'end_time': datetime.time(18, 0),
-                'break_duration_minutes': 60,
-                'grace_period_minutes': 15,
-                'half_day_threshold_minutes': 240,
-                'full_day_threshold_minutes': 420,
-            }
+        # 6. Designations
+        desig_ceo = Designation.objects.create(
+            organization=govaly,
+            department=dept_exec,
+            title='Chief Executive Officer',
+            code='CEO'
+        )
+        desig_hr = Designation.objects.create(
+            organization=govaly,
+            department=dept_hr,
+            title='HR Administrator',
+            code='HR-ADMIN'
+        )
+        desig_lead = Designation.objects.create(
+            organization=govaly,
+            department=dept_tech,
+            title='Tech Team Lead',
+            code='TECH-LEAD'
+        )
+        desig_swe = Designation.objects.create(
+            organization=govaly,
+            department=dept_tech,
+            title='Software Engineer',
+            code='SWE'
         )
 
-        # 7. Leave Types
-        annual_leave, _ = LeaveType.objects.get_or_create(
-            organization=acme,
+        # 7. Shift
+        shift = Shift.objects.create(
+            organization=govaly,
+            name='Standard Enterprise Shift',
+            code='STANDARD',
+            start_time=datetime.time(9, 0),
+            end_time=datetime.time(18, 0),
+            grace_period_minutes=15,
+            break_duration_minutes=60,
+            half_day_threshold_minutes=240
+        )
+
+        # 8. Leave Types
+        lt_annual = LeaveType.objects.create(
+            organization=govaly,
+            name='Annual Leave',
             code='ANNUAL',
-            defaults={
-                'name': 'Annual Leave',
-                'default_quota_days': 20.0,
-                'is_paid': True,
-                'max_carryover_days': 5.0,
-            }
+            default_quota_days=Decimal('15.0'),
+            is_paid=True
         )
-        sick_leave, _ = LeaveType.objects.get_or_create(
-            organization=acme,
-            code='SICK',
-            defaults={
-                'name': 'Sick Leave',
-                'default_quota_days': 10.0,
-                'is_paid': True,
-                'requires_attachment': True,
-            }
-        )
-        casual_leave, _ = LeaveType.objects.get_or_create(
-            organization=acme,
+        lt_casual = LeaveType.objects.create(
+            organization=govaly,
+            name='Casual Leave',
             code='CASUAL',
-            defaults={
-                'name': 'Casual Leave',
-                'default_quota_days': 5.0,
-                'is_paid': True,
-            }
+            default_quota_days=Decimal('10.0'),
+            is_paid=True
+        )
+        lt_sick = LeaveType.objects.create(
+            organization=govaly,
+            name='Sick Leave',
+            code='SICK',
+            default_quota_days=Decimal('10.0'),
+            is_paid=True
         )
 
-        # 8. Users & Employees
-        # Super Admin
-        admin_user, _ = User.objects.get_or_create(
-            email='admin@acme-corp.com',
-            defaults={
-                'organization': acme,
-                'role': 'SUPER_ADMIN',
-                'is_staff': True,
-                'is_superuser': True,
-            }
-        )
-        admin_user.set_password('Admin123!')
-        admin_user.save()
+        today = timezone.localdate()
+        joining_date = datetime.date(2025, 1, 1)
 
-        # HR Admin
-        hr_user, _ = User.objects.get_or_create(
-            email='sarah.jenkins@acme-corp.com',
-            defaults={
-                'organization': acme,
-                'role': 'HR_ADMIN',
-                'is_staff': True,
-            }
+        # 9. Create Users and Employees
+        # User 1: Adib (CEO)
+        user_adib = User.objects.create_user(
+            email='adib@govaly.com',
+            password='Pass@1234!',
+            organization=govaly,
+            role='SUPER_ADMIN',
+            is_staff=True,
+            is_superuser=True
         )
-        hr_user.set_password('Password123!')
-        hr_user.save()
-
-        hr_emp, _ = Employee.objects.get_or_create(
-            user=hr_user,
-            defaults={
-                'organization': acme,
-                'employee_code': 'EMP-001',
-                'first_name': 'Sarah',
-                'last_name': 'Jenkins',
-                'work_email': 'sarah.jenkins@acme-corp.com',
-                'phone_number': '+1-512-555-0101',
-                'joining_date': datetime.date(2023, 1, 15),
-                'department': hr_dept,
-                'designation': des_hr_dir,
-                'office': hq_office,
-                'network_username': 'sjenkins',
-                'avatar_url': 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=128&auto=format&fit=crop&q=80',
-            }
+        emp_adib = Employee.objects.create(
+            organization=govaly,
+            user=user_adib,
+            employee_code='GV-001',
+            first_name='Adib',
+            last_name='(CEO)',
+            work_email='adib@govaly.com',
+            phone_number='+8801700000001',
+            joining_date=joining_date,
+            department=dept_exec,
+            designation=desig_ceo,
+            office=office,
+            manager=None,
+            network_username='adib',
+            employment_status='ACTIVE'
+        )
+        SalaryStructure.objects.create(
+            organization=govaly,
+            employee=emp_adib,
+            base_salary=Decimal('15000.00'),
+            housing_allowance=Decimal('2500.00'),
+            transport_allowance=Decimal('1000.00'),
+            medical_allowance=Decimal('1000.00'),
+            tax_deduction_percentage=Decimal('10.00'),
+            provident_fund_percentage=Decimal('5.00')
         )
 
-        # Manager
-        mgr_user, _ = User.objects.get_or_create(
-            email='marcus.brody@acme-corp.com',
-            defaults={
-                'organization': acme,
-                'role': 'MANAGER',
-                'is_staff': False,
-            }
+        # User 2: Tech (HR Admin)
+        user_tech = User.objects.create_user(
+            email='tech@govaly.com',
+            password='Pass@1234!',
+            organization=govaly,
+            role='HR_ADMIN',
+            is_staff=True
         )
-        mgr_user.set_password('Password123!')
-        mgr_user.save()
-
-        mgr_emp, _ = Employee.objects.get_or_create(
-            user=mgr_user,
-            defaults={
-                'organization': acme,
-                'employee_code': 'EMP-002',
-                'first_name': 'Marcus',
-                'last_name': 'Brody',
-                'work_email': 'marcus.brody@acme-corp.com',
-                'phone_number': '+1-512-555-0102',
-                'joining_date': datetime.date(2023, 3, 1),
-                'department': eng_dept,
-                'designation': des_vp_eng,
-                'office': hq_office,
-                'network_username': 'mbrody',
-                'avatar_url': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=128&auto=format&fit=crop&q=80',
-            }
+        emp_tech = Employee.objects.create(
+            organization=govaly,
+            user=user_tech,
+            employee_code='GV-002',
+            first_name='Tech',
+            last_name='HR',
+            work_email='tech@govaly.com',
+            phone_number='+8801700000002',
+            joining_date=joining_date,
+            department=dept_hr,
+            designation=desig_hr,
+            office=office,
+            manager=emp_adib,
+            network_username='tech',
+            employment_status='ACTIVE'
         )
-
-        # Employee 1
-        emp1_user, _ = User.objects.get_or_create(
-            email='alex.rivera@acme-corp.com',
-            defaults={
-                'organization': acme,
-                'role': 'EMPLOYEE',
-            }
-        )
-        emp1_user.set_password('Password123!')
-        emp1_user.save()
-
-        emp1, _ = Employee.objects.get_or_create(
-            user=emp1_user,
-            defaults={
-                'organization': acme,
-                'employee_code': 'EMP-003',
-                'first_name': 'Alex',
-                'last_name': 'Rivera',
-                'work_email': 'alex.rivera@acme-corp.com',
-                'phone_number': '+1-512-555-0103',
-                'joining_date': datetime.date(2024, 2, 1),
-                'department': eng_dept,
-                'designation': des_sr_eng,
-                'office': hq_office,
-                'manager': mgr_emp,
-                'network_username': 'arivera',
-                'avatar_url': 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=128&auto=format&fit=crop&q=80',
-            }
+        SalaryStructure.objects.create(
+            organization=govaly,
+            employee=emp_tech,
+            base_salary=Decimal('6500.00'),
+            housing_allowance=Decimal('1000.00'),
+            transport_allowance=Decimal('500.00'),
+            medical_allowance=Decimal('500.00'),
+            tax_deduction_percentage=Decimal('5.00'),
+            provident_fund_percentage=Decimal('3.00')
         )
 
-        # Employee 2
-        emp2_user, _ = User.objects.get_or_create(
-            email='elena.rostova@acme-corp.com',
-            defaults={
-                'organization': acme,
-                'role': 'EMPLOYEE',
-            }
+        # User 3: Fahim (Tech Team Lead)
+        user_fahim = User.objects.create_user(
+            email='fahim@govaly.com',
+            password='Pass@1234!',
+            organization=govaly,
+            role='MANAGER'
         )
-        emp2_user.set_password('Password123!')
-        emp2_user.save()
-
-        emp2, _ = Employee.objects.get_or_create(
-            user=emp2_user,
-            defaults={
-                'organization': acme,
-                'employee_code': 'EMP-004',
-                'first_name': 'Elena',
-                'last_name': 'Rostova',
-                'work_email': 'elena.rostova@acme-corp.com',
-                'phone_number': '+1-512-555-0104',
-                'joining_date': datetime.date(2024, 4, 15),
-                'department': prd_dept,
-                'designation': des_lead_des,
-                'office': hq_office,
-                'manager': mgr_emp,
-                'network_username': 'erostova',
-                'avatar_url': 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=128&auto=format&fit=crop&q=80',
-            }
+        emp_fahim = Employee.objects.create(
+            organization=govaly,
+            user=user_fahim,
+            employee_code='GV-003',
+            first_name='Fahim',
+            last_name='(Lead)',
+            work_email='fahim@govaly.com',
+            phone_number='+8801700000003',
+            joining_date=joining_date,
+            department=dept_tech,
+            designation=desig_lead,
+            office=office,
+            manager=emp_adib,
+            network_username='fahim',
+            employment_status='ACTIVE'
         )
-
-        # Beta Organization Employee (for tenant isolation verification)
-        beta_user, _ = User.objects.get_or_create(
-            email='oliver.smith@beta-innovations.com',
-            defaults={
-                'organization': beta,
-                'role': 'EMPLOYEE',
-            }
-        )
-        beta_user.set_password('Password123!')
-        beta_user.save()
-
-        # Department in Beta
-        beta_dept, _ = Department.objects.get_or_create(
-            organization=beta,
-            code='OPS',
-            defaults={'name': 'Operations'}
-        )
-        beta_des, _ = Designation.objects.get_or_create(
-            organization=beta,
-            department=beta_dept,
-            code='OP-SPEC',
-            defaults={'title': 'Operations Specialist', 'level': 2}
-        )
-        beta_office, _ = Office.objects.get_or_create(
-            organization=beta,
-            name='London HQ',
-            defaults={'timezone': 'Europe/London'}
+        SalaryStructure.objects.create(
+            organization=govaly,
+            employee=emp_fahim,
+            base_salary=Decimal('8500.00'),
+            housing_allowance=Decimal('1500.00'),
+            transport_allowance=Decimal('800.00'),
+            medical_allowance=Decimal('600.00'),
+            tax_deduction_percentage=Decimal('7.00'),
+            provident_fund_percentage=Decimal('4.00')
         )
 
-        beta_emp, _ = Employee.objects.get_or_create(
-            user=beta_user,
-            defaults={
-                'organization': beta,
-                'employee_code': 'BETA-001',
-                'first_name': 'Oliver',
-                'last_name': 'Smith',
-                'work_email': 'oliver.smith@beta-innovations.com',
-                'joining_date': datetime.date(2024, 1, 10),
-                'department': beta_dept,
-                'designation': beta_des,
-                'office': beta_office,
-                'network_username': 'osmith',
-            }
+        # User 4: Abrar (Tech Team Member)
+        user_abrar = User.objects.create_user(
+            email='abrar@govaly.com',
+            password='Pass@1234!',
+            organization=govaly,
+            role='EMPLOYEE'
+        )
+        emp_abrar = Employee.objects.create(
+            organization=govaly,
+            user=user_abrar,
+            employee_code='GV-004',
+            first_name='Abrar',
+            last_name='(Engineer)',
+            work_email='abrar@govaly.com',
+            phone_number='+8801700000004',
+            joining_date=joining_date,
+            department=dept_tech,
+            designation=desig_swe,
+            office=office,
+            manager=emp_fahim,
+            network_username='abrar',
+            employment_status='ACTIVE'
+        )
+        SalaryStructure.objects.create(
+            organization=govaly,
+            employee=emp_abrar,
+            base_salary=Decimal('5500.00'),
+            housing_allowance=Decimal('1000.00'),
+            transport_allowance=Decimal('500.00'),
+            medical_allowance=Decimal('400.00'),
+            tax_deduction_percentage=Decimal('5.00'),
+            provident_fund_percentage=Decimal('3.00')
         )
 
-        # 9. Shifts & Leave Balances
-        all_emps = [hr_emp, mgr_emp, emp1, emp2]
-        current_year = timezone.now().year
-
-        for emp in all_emps:
-            EmployeeShift.objects.get_or_create(
-                organization=acme,
+        # Assign shifts and leave balances
+        for emp in [emp_adib, emp_tech, emp_fahim, emp_abrar]:
+            EmployeeShift.objects.create(
+                organization=govaly,
                 employee=emp,
-                shift=standard_shift,
-                start_date=emp.joining_date,
-                defaults={'is_active': True}
+                shift=shift,
+                start_date=joining_date,
+                is_active=True
             )
-
-            for lt in [annual_leave, sick_leave, casual_leave]:
-                LeaveBalance.objects.get_or_create(
-                    organization=acme,
+            for lt in [lt_annual, lt_casual, lt_sick]:
+                LeaveBalance.objects.create(
+                    organization=govaly,
                     employee=emp,
                     leave_type=lt,
-                    year=current_year,
-                    defaults={
-                        'allocated_days': lt.default_quota_days,
-                        'remaining_days': lt.default_quota_days,
-                        'used_days': 0.0,
-                        'pending_days': 0.0,
-                    }
+                    year=today.year,
+                    allocated_days=lt.default_quota_days,
+                    used_days=Decimal('0.00'),
+                    pending_days=Decimal('0.00'),
+                    remaining_days=lt.default_quota_days
                 )
 
-        # 10. Sample Attendance History (past 7 days for Alex Rivera)
-        today = timezone.localdate()
-        for i in range(7):
-            d = today - datetime.timedelta(days=i)
-            if d.weekday() < 5:  # Weekday
-                status_choice = 'PRESENT' if i % 4 != 0 else 'LATE'
-                late_mins = 0 if status_choice == 'PRESENT' else 18
-                first_in_time = datetime.time(8, 55) if status_choice == 'PRESENT' else datetime.time(9, 18)
-                tz = timezone.get_current_timezone()
-                in_dt = timezone.make_aware(datetime.datetime.combine(d, first_in_time), tz)
-                out_dt = timezone.make_aware(datetime.datetime.combine(d, datetime.time(18, 5)), tz)
+        # 10. Sample Attendance for the current date & recent days
+        for day_offset in range(5, -1, -1):
+            rec_date = today - datetime.timedelta(days=day_offset)
+            if rec_date.weekday() < 5:  # Monday - Friday
+                for emp in [emp_adib, emp_tech, emp_fahim, emp_abrar]:
+                    checkin_dt = timezone.make_aware(datetime.datetime.combine(rec_date, datetime.time(9, 5)))
+                    checkout_dt = timezone.make_aware(datetime.datetime.combine(rec_date, datetime.time(18, 10)))
+                    rec, _ = AttendanceRecord.objects.get_or_create(
+                        organization=govaly,
+                        employee=emp,
+                        attendance_date=rec_date,
+                        defaults={
+                            'shift': shift,
+                            'first_check_in': checkin_dt,
+                            'last_check_out': checkout_dt,
+                            'total_work_minutes': 485,
+                            'late_minutes': 0,
+                            'overtime_minutes': 10,
+                            'status': 'PRESENT',
+                            'source': 'WIFI'
+                        }
+                    )
+                    AttendanceEvent.objects.create(
+                        organization=govaly,
+                        attendance_record=rec,
+                        employee=emp,
+                        event_type='CHECK_IN',
+                        timestamp=checkin_dt,
+                        source='WIFI',
+                        access_point=ap_tech if emp in [emp_fahim, emp_abrar] else ap_exec
+                    )
+                    AttendanceEvent.objects.create(
+                        organization=govaly,
+                        attendance_record=rec,
+                        employee=emp,
+                        event_type='CHECK_OUT',
+                        timestamp=checkout_dt,
+                        source='WIFI',
+                        access_point=ap_tech if emp in [emp_fahim, emp_abrar] else ap_exec
+                    )
 
-                rec, _ = AttendanceRecord.objects.get_or_create(
-                    organization=acme,
-                    employee=emp1,
-                    attendance_date=d,
-                    defaults={
-                        'shift': standard_shift,
-                        'first_check_in': in_dt,
-                        'last_check_out': out_dt,
-                        'total_work_minutes': 490,
-                        'late_minutes': late_mins,
-                        'status': status_choice,
-                        'source': 'WIFI',
-                    }
-                )
-
-                # Wi-Fi Session record
-                WiFiSession.objects.get_or_create(
-                    organization=acme,
-                    employee=emp1,
-                    access_point=ap1,
-                    raw_mac_address=ap1.mac_address,
-                    raw_username=emp1.network_username,
-                    session_start=in_dt,
-                    session_end=out_dt,
-                    defaults={
-                        'duration_seconds': 490 * 60,
-                        'status': 'PROCESSED',
-                    }
-                )
-
-        # 11. Sample Holiday
-        Holiday.objects.get_or_create(
-            organization=acme,
-            holiday_date=datetime.date(current_year, 12, 25),
-            defaults={
-                'name': 'Christmas Day',
-                'is_recurring': True,
-                'description': 'Company observed public holiday',
-            }
+        # 11. Welcome Announcement
+        Announcement.objects.create(
+            organization=govaly,
+            published_by=user_adib,
+            title='Welcome to Govaly Enterprise HRM Platform',
+            content='Govaly HRM Platform is officially live with Automated Wi-Fi Tracking, Hybrid GPS Geofencing, and Monthly Payroll.',
+            is_pinned=True
         )
 
-        # 12. Sample Announcements & Notifications
-        Announcement.objects.get_or_create(
-            organization=acme,
-            title='Annual Company All-Hands Meeting',
-            defaults={
-                'content': 'Join us this Thursday at 2:00 PM EST for our Q4 strategy review and roadmap reveal.',
-                'published_by': hr_user,
-                'is_pinned': True,
-            }
-        )
-
-        Notification.objects.get_or_create(
-            organization=acme,
-            recipient=emp1_user,
-            title='Attendance Verified',
-            defaults={
-                'message': 'Your Wi-Fi attendance session for today has been logged and verified.',
-                'notification_type': 'ATTENDANCE',
-                'is_read': False,
-            }
-        )
-
-        self.stdout.write(self.style.SUCCESS('Successfully seeded enterprise HRM database!'))
-        self.stdout.write(self.style.SUCCESS('Default Demo Credentials:'))
-        self.stdout.write(self.style.NOTICE('  Admin:    admin@acme-corp.com / Admin123!'))
-        self.stdout.write(self.style.NOTICE('  HR:       sarah.jenkins@acme-corp.com / Password123!'))
-        self.stdout.write(self.style.NOTICE('  Manager:  marcus.brody@acme-corp.com / Password123!'))
-        self.stdout.write(self.style.NOTICE('  Employee: alex.rivera@acme-corp.com / Password123!'))
+        self.stdout.write(self.style.SUCCESS('Successfully seeded Govaly workspace!'))
+        self.stdout.write(self.style.NOTICE('--------------------------------------------------'))
+        self.stdout.write(self.style.NOTICE('1. CEO:             adib@govaly.com   | Pass: Pass@1234!'))
+        self.stdout.write(self.style.NOTICE('2. HR Admin:        tech@govaly.com   | Pass: Pass@1234!'))
+        self.stdout.write(self.style.NOTICE('3. Tech Team Lead:  fahim@govaly.com  | Pass: Pass@1234!'))
+        self.stdout.write(self.style.NOTICE('4. Tech Member:     abrar@govaly.com  | Pass: Pass@1234!'))
+        self.stdout.write(self.style.NOTICE('--------------------------------------------------'))
