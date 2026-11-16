@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from rest_framework.routers import DefaultRouter
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
@@ -69,11 +69,11 @@ router.register(r'payroll/payslips', PayslipViewSet, basename='payslip')
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    # Health & Readiness Probes
-    path('healthz/', HealthzView.as_view(), name='healthz'),
-    path('readyz/', ReadyzView.as_view(), name='readyz'),
-    path('api/v1/healthz/', HealthzView.as_view(), name='api_healthz'),
-    path('api/v1/readyz/', ReadyzView.as_view(), name='api_readyz'),
+    # Health & Readiness Probes (matches with or without trailing slash)
+    re_path(r'^healthz/?$', HealthzView.as_view(), name='healthz'),
+    re_path(r'^readyz/?$', ReadyzView.as_view(), name='readyz'),
+    re_path(r'^api/v1/healthz/?$', HealthzView.as_view(), name='api_healthz'),
+    re_path(r'^api/v1/readyz/?$', ReadyzView.as_view(), name='api_readyz'),
 
     # OpenAPI Schema & Swagger Documentation
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
